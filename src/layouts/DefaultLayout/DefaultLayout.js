@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import Header from '~/layouts/components/LoginHeader';
+import Header from '~/layouts/components/Header';
 import Footer from '~/layouts/components/Footer';
 import Sidebar from '~/layouts/components/Sidebar';
 import styles from './DefaultLayout.module.scss';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const cx = classNames.bind(styles);
 

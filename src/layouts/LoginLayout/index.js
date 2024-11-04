@@ -2,20 +2,22 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import Header from '~/layouts/components/LoginHeader';
 import Footer from '~/layouts/components/Footer';
-import styles from './HeaderLogin.module.scss';
-import Motion from '~/components/Motion';
+import styles from './loginLayout.module.scss';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'react-router-dom'; // Nhập useLocation
 
 const cx = classNames.bind(styles);
-function HeaderLogin({ children }) {
+function LoginLayout({ children }) {
+    const location = useLocation();
     return (
-        <Motion>
+        <div>
             <Header />
             <div className={cx('container')}>
                 <div className={cx('content')}>{children}</div>
             </div>
             <Footer />
-        </Motion>
+        </div>
     );
 }
 
-export default HeaderLogin;
+export default LoginLayout;

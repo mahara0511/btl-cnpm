@@ -1,2 +1,2 @@
 export { default, default as DefaultLayout } from './DefaultLayout';
-export { default as HeaderOnly } from './Login';
+export { default as LoginLayout } from './LoginLayout';
