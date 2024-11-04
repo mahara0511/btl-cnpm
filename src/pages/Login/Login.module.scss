@@ -1,0 +1,50 @@
+.wrapper {
+    margin-top: 70px;
+    width: 954px;
+    text-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
+
+    .page-content {
+        display: flex;
+        align-items: center;
+        .title {
+            line-height: 32px;
+            display: block;
+            font-size: 32px;
+            font-weight: 900;
+            span {
+                color: var(--primary);
+            }
+        }
+        .slogan {
+            display: block;
+            font-weight: 900;
+        }
+
+        .desc {
+            font-size: 14px;
+            font-weight: 600;
+            display: block;
+            margin-top: 30px;
+        }
+
+        .button-list {
+            margin-top: 50px;
+        }
+
+        .custom-btn {
+            padding: 8px 46px;
+        }
+
+        .login-btn:hover {
+            color: var(--white);
+        }
+        .custom-btn-more {
+            color: var(--primary);
+            text-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .landing-image {
+            width: 388px;
+        }
+    }
+}
