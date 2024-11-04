@@ -10,7 +10,10 @@ import {
     faSignOut,
     faUser,
     faFile,
+    faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
+
+// import { faFile } from '@fortawesome/free-regular-svg-icons';
 import { Link, useLocation } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -18,9 +21,9 @@ import 'tippy.js/dist/tippy.css';
 import config from '~/config';
 import Button from '~/components/Button';
 import styles from './Header.module.scss';
-import images from '~/assets/images';
 import Menu from '~/components/Popper/Menu';
 import { InboxIcon, MessageIcon, UploadIcon } from '~/components/Icons';
+import images from '~/assets/images';
 import Image from '~/components/Image';
 import Search from '../Search';
 
@@ -79,8 +82,8 @@ function Header() {
         },
         {
             icon: <FontAwesomeIcon icon={faCoins} />,
-            title: 'Get coins',
-            to: '/coin',
+            title: 'Get Pages',
+            to: '/buy',
         },
         {
             icon: <FontAwesomeIcon icon={faGear} />,
@@ -91,7 +94,7 @@ function Header() {
         {
             icon: <FontAwesomeIcon icon={faSignOut} />,
             title: 'Log out',
-            to: '/logout',
+            to: '/',
             separate: true,
         },
     ];
@@ -157,44 +160,60 @@ function Header() {
 
                     <Button
                         to={config.routes.home}
-                        className={cx('nav-item', 'nav-btn', { active: isActive(config.routes.home) })}
+                        className={cx('nav-item', 'nav-btn')}
+                        primary={isActive(config.routes.home)}
                     >
                         Trang chủ
                     </Button>
 
                     <Button
                         to={config.routes.document}
-                        className={cx('nav-item', 'nav-btn', { active: isActive(config.routes.document) })}
+                        className={cx('nav-item', 'nav-btn')}
+                        primary={isActive(config.routes.document)}
                     >
                         Tệp của tôi
                     </Button>
 
                     <Button
                         to={config.routes.print}
-                        className={cx('nav-item', 'nav-btn', { active: isActive(config.routes.print) })}
+                        className={cx('nav-item', 'nav-btn')}
+                        primary={isActive(config.routes.print)}
                     >
                         In ấn
                     </Button>
 
                     <Button
                         to={config.routes.buy}
-                        className={cx('nav-item', 'nav-btn', { active: isActive(config.routes.buy) })}
+                        className={cx('nav-item', 'nav-btn')}
+                        primary={isActive(config.routes.buy)}
                     >
                         Mua giấy
                     </Button>
 
                     <Button
                         to={config.routes.history}
-                        className={cx('nav-item', 'nav-btn', { active: isActive(config.routes.history) })}
+                        className={cx('nav-item', 'nav-btn')}
+                        primary={isActive(config.routes.history)}
                     >
                         Lịch sử in
                     </Button>
                 </div>
                 <div className={cx('menu')}>
                     <Button className={cx('menu-balance')} to={config.routes.buy} outline>
-                        <FontAwesomeIcon icon="faFile" /> 500 Tờ
+                        <FontAwesomeIcon icon={faFile} className={cx('file-icon')} /> 500 Tờ
                     </Button>
-                    <Image className={cx('user-avatar')} src={images.avatar} alt="Nguyen Van A" />
+                    <Menu items={currentUser ? userMenu : MENU_ITEMS} onChange={handleMenuChange}>
+                        {currentUser ? (
+                            <div className={cx('avatar-control')}>
+                                <Image className={cx('user-avatar')} src={images.avatar} alt="Nguyen Van A" />
+                                <FontAwesomeIcon icon={faChevronDown} className={cx('chevron-icon')} />
+                            </div>
+                        ) : (
+                            <button className={cx('more-btn')}>
+                                <FontAwesomeIcon icon={faEllipsisVertical} />
+                            </button>
+                        )}
+                    </Menu>
                 </div>
             </div>
         </header>

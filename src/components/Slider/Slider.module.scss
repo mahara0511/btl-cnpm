@@ -1,0 +1,51 @@
+.slider-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center; /* Căn giữa slider */
+    align-items: center;
+    background-size: cover;
+
+    .slick-dots {
+        bottom: 10px; // Điều chỉnh vị trí của dấu chấm
+        display: flex !important; // Căn giữa
+        justify-content: center; // Căn giữa
+    }
+
+    .slick-dots li {
+        margin: 0 2px; // Khoảng cách giữa các dấu chấm
+    }
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 20%; /* Chiều rộng của background phía bên */
+        height: 97.5%;
+        background-size: cover;
+    }
+    &::before {
+        background: url('~/src/assets/images/home-left-background.jpg') no-repeat center center / cover;
+    }
+    &::after {
+        background: url('~/src/assets/images/home-right-background.jpg') no-repeat center center / cover;
+    }
+
+    &::before {
+        left: 0; /* Đặt nền bên trái */
+    }
+
+    &::after {
+        right: 0; /* Đặt nền bên phải */
+    }
+}
+
+.slider {
+    width: 60%; /* Điều chỉnh kích thước slider theo mong muốn */
+}
+
+.image-slider {
+    width: 100%;
+    object-fit: cover;
+}

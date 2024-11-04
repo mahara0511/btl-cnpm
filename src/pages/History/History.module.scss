@@ -1,0 +1,155 @@
+.wrapper {
+    padding: 0 60px 50px;
+    h2 {
+        color: var(--primary);
+        font-weight: 500;
+        font-size: 22px;
+        margin-top: 10px;
+        font-weight: 700;
+        text-align: center;
+    }
+    .document-table {
+        text-align: center;
+        width: 100%;
+        padding: 0px 30px 60px;
+        .header-table {
+            .add-btn {
+                font-weight: 600;
+                font-size: 16px;
+                box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2); /* Bóng mờ, hướng xuống dưới phải */
+                padding: 0 6px;
+                height: 40px;
+            }
+
+            .add-btn:hover {
+                cursor: pointer;
+                opacity: 0.6;
+            }
+            .header-table-menu {
+                .menu-btn {
+                    padding: 0 17px;
+                    min-width: 40px;
+                    margin: 0;
+                    font-size: 20px;
+                    border: 1px solid var(--text-color);
+                    border-radius: 0;
+                }
+                .menu-btn:first-child {
+                    background-color: #09376b43;
+                    border-top-left-radius: 40px;
+                    border-bottom-left-radius: 40px;
+                }
+
+                .menu-btn:last-child {
+                    border-top-right-radius: 40px;
+                    border-bottom-right-radius: 40px;
+                }
+            }
+        }
+        .custom-table {
+            margin-top: 10px;
+            border: 1px solid #d6d6d6;
+            font-size: 12px;
+            text-align: center;
+            thead {
+                tr {
+                    background-color: #09376b43; /* Màu nền cho hàng tiêu đề */
+                    color: var(--text-color); /* Màu chữ cho hàng tiêu đề */
+
+                    th:first-child {
+                        width: 60%;
+                        text-align: left;
+                    }
+                }
+            }
+            tbody {
+                tr {
+                    background-color: var(--white); /* Màu nền cho các hàng trong thân bảng */
+                    td {
+                        text-align: center;
+
+                        .file-icon {
+                            font-size: 16px;
+                            margin-right: 16px;
+                        }
+                    }
+                    td:first-child {
+                        padding-left: 20px;
+                        text-align: left;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.modal {
+    background-color: white;
+    padding: 30px 0 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    font-size: 14px;
+
+    .selected-files {
+        margin-top: 20px; // Khoảng cách phía trên
+        padding: 10px 30px; // Khoảng cách bên trong
+        border-radius: 5px; // Bo góc
+
+        &-title {
+            font-size: 16px; // Kích thước font chữ cho tiêu đề
+            margin-bottom: 10px; // Khoảng cách phía dưới tiêu đề
+            font-weight: 600;
+        }
+
+        &-list {
+            list-style: none; // Không có dấu đầu dòng
+            padding: 0; // Bỏ padding mặc định
+            margin: 0; // Bỏ margin mặc định
+        }
+
+        &-item {
+            padding: 5px 0; // Khoảng cách giữa các mục
+            border-bottom: 1px solid #ccc; // Đường viền dưới mỗi mục
+            &:last-child {
+                border-bottom: none; // Không có đường viền cho mục cuối
+            }
+        }
+    }
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); // Màu nền mờ khi modal mở
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999; // Đảm bảo modal đè lên mọi thứ khác
+}
+
+.dropzone {
+    border-top: 2px dashed #007bff !important;
+    border-bottom: 2px dashed #007bff !important;
+    border-radius: 5px;
+    padding: 20px 0 10px;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 20px;
+    background-color: #00366b20;
+
+    .title {
+        font-weight: 600;
+        .underline {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+    }
+}
+
+.modal-btn {
+    margin-left: 40%;
+}

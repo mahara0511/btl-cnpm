@@ -1,0 +1,58 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    // display: flex;
+
+    .slider {
+    }
+    // .sub-slider {
+    //     flex: 1;
+    // }
+
+    .home-content {
+        width: 72%;
+        margin: auto;
+        margin-top: 30px;
+        margin-bottom: 100px;
+        display: flex;
+        align-items: center;
+        .landing-image {
+            width: 100%;
+        }
+        .price-table {
+            text-align: center;
+            border: 1px solid #d9d9d9;
+            h3 {
+                color: var(--primary);
+                font-weight: 500;
+                font-size: 18px;
+                margin: 10px 0;
+            }
+            .custom-table {
+                border: 1px solid #d9d9d9;
+                font-size: 12px;
+                text-align: center;
+            }
+
+            .custom-table thead tr {
+                background-color: #d9d9d9; /* Màu nền cho hàng tiêu đề */
+                color: var(--text-color); /* Màu chữ cho hàng tiêu đề */
+            }
+
+            .custom-table tbody tr {
+                background-color: var(--white); /* Màu nền cho các hàng trong thân bảng */
+            }
+        }
+    }
+}
+
+.content {
+    flex: 1;
+}

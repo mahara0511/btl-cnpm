@@ -6,10 +6,10 @@ import { HeaderOnly } from '~/layouts';
 // Pages
 import Home from '~/pages/Home';
 import Login from '~/pages/Login';
-import Document from '~/pages/Profile';
+import Document from '~/pages/Document';
 import Print from '~/pages/Upload';
 import Buy from '~/pages/Search';
-import History from '~/pages/Live';
+import History from '~/pages/History';
 
 // Layout
 import { LoginLayout } from '~/layouts';
