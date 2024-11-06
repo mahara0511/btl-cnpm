@@ -49,10 +49,69 @@
             background-color: var(--white); /* Màu nền cho các hàng trong thân bảng */
         }
     }
-    .purchase-section {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 8px;
+    .purchase-wrapper {
+        display: flex;
+        justify-content: center;
+        border: 1px solid #d9d9d9;
+        .purchase-section {
+            width: 80%;
+            font-weight: 600;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+
+            h5 {
+                color: var(--primary);
+                font-weight: 600;
+                font-size: 18px;
+                margin: 10px 0 20px;
+            }
+            .form-group {
+                position: relative;
+                display: flex;
+                border: 1px solid #d9d9d9;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 12px;
+                margin-bottom: 15px;
+                padding: 5px 0;
+
+                label {
+                    margin: 0 0 0 10px;
+                }
+                input {
+                    margin-right: 5px;
+                    width: 50%;
+                    height: 25px;
+                    text-align: center;
+                    font-weight: 600;
+                    border: 1px solid #989898;
+                }
+            }
+
+            .form-group:nth-child(2n + 1) {
+                input {
+                    background-color: #d9d9d9;
+                }
+            }
+            .last {
+                flex-direction: column;
+                label {
+                    margin: 10px 0 10px 10px;
+                    align-self: start;
+                }
+                select {
+                    border: 1px solid #989898;
+                    width: 50%;
+                    font-weight: 600;
+                    height: 30px;
+                    padding-left: 10px;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
     }
     .pay-btn {
         height: 35px;

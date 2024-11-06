@@ -94,7 +94,7 @@ function Buy() {
                 'status-color': 'status-success',
             };
             setleftOfPages((prev) => prev - numberOfPages);
-            updatePaperCount(paperCount + numberOfPages);
+            // updatePaperCount(paperCount + numberOfPages);
         } else {
             newEntry = {
                 time: currentTime,
@@ -151,43 +151,45 @@ function Buy() {
                         </div>
                     </div>
 
-                    <div className={`${cx()} col-md-12`}>
-                        <div className={`${cx('purchase-section')}`}>
-                            <h5>MUA GIẤY & THANH TOÁN</h5>
-                            <form>
-                                <div className="form-group">
-                                    <label>Số tờ khả dụng:</label>
-                                    <input type="text" className="form-control" value={leftOfPages} disabled />
-                                </div>
-                                <div className="form-group">
-                                    <label>1. Nhập số tờ:</label>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        value={numberOfPages}
-                                        onChange={(e) => setNumberOfPages(e.target.value)}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label>2. Thành tiền:</label>
-                                    <input type="text" className="form-control" value={totalPrice} disabled />
-                                </div>
-                                <div className="form-group">
-                                    <label>3. Phương thức thanh toán:</label>
-                                    <select
-                                        className="form-control"
-                                        value={paymentMethod}
-                                        onChange={(e) => setPaymentMethod(e.target.value)}
-                                    >
-                                        <option>BK Pay</option>
-                                        <option>VN Pay</option>
-                                        <option>Zalo Pay</option>
-                                    </select>
-                                </div>
-                                <Button slim primary className={cx('pay-btn')} onClick={handlePayment}>
-                                    Thanh toán
-                                </Button>
-                            </form>
+                    <div className={`${cx('')} col-md-12`}>
+                        <div className={`${cx('purchase-wrapper')} `}>
+                            <div className={`${cx('purchase-section')}`}>
+                                <h5>MUA GIẤY & THANH TOÁN</h5>
+                                <form>
+                                    <div className={`${cx('form-group')} form-group`}>
+                                        <label>Số tờ khả dụng:</label>
+                                        <input type="text" className="form-control" value={leftOfPages} disabled />
+                                    </div>
+                                    <div className={`${cx('form-group')} form-group`}>
+                                        <label>1. Nhập số tờ:</label>
+                                        <input
+                                            type="number"
+                                            className="form-control"
+                                            value={numberOfPages}
+                                            onChange={(e) => setNumberOfPages(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className={`${cx('form-group')} form-group`}>
+                                        <label>2. Thành tiền:</label>
+                                        <input type="text" className="form-control" value={totalPrice} disabled />
+                                    </div>
+                                    <div className={`${cx('form-group', 'last')} form-group`}>
+                                        <label>3. Phương thức thanh toán:</label>
+                                        <select
+                                            className="form-control"
+                                            value={paymentMethod}
+                                            onChange={(e) => setPaymentMethod(e.target.value)}
+                                        >
+                                            <option>BK Pay</option>
+                                            <option>VN Pay</option>
+                                            <option>Zalo Pay</option>
+                                        </select>
+                                    </div>
+                                    <Button slim primary className={cx('pay-btn')} onClick={handlePayment}>
+                                        Thanh toán
+                                    </Button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
