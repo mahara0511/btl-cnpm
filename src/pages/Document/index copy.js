@@ -1,28 +1,134 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import styles from './Document.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faBars, faTable, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { faFilePdf, faFilePowerpoint, faFileWord, faFileExcel, faFile } from '@fortawesome/free-regular-svg-icons';
+import { faPlus, faBars, faTable } from '@fortawesome/free-solid-svg-icons';
+import { faFilePdf, faFilePowerpoint, faFileWord, faFileExcel } from '@fortawesome/free-regular-svg-icons';
 import { useDropzone } from 'react-dropzone';
+import ImageSlider from '~/components/Slider';
+import Image from '~/components/Image';
+import images from '~/assets/images';
 import Button from '~/components/Button';
-
 const cx = classNames.bind(styles);
 
 function Document() {
-    const [tableData, setTableData] = useState(() => {
-        const savedData = localStorage.getItem('tableData');
-        return savedData ? JSON.parse(savedData) : [];
-    });
-
+    const tableData = [
+        {
+            icon: faFilePdf,
+            fileName: 'Lab_report_EmbeddedSystem.pdf',
+            fileType: 'Tài liệu PDF',
+            date: '12:20 22/10/2024',
+            size: '1.102MB',
+        },
+        {
+            icon: faFileWord,
+            fileName: 'Lab_test_DistributeSystem.doc',
+            fileType: 'Tài liệu Word',
+            date: '14:24 12/09/2024',
+            size: '5.222MB',
+        },
+        {
+            icon: faFilePowerpoint,
+            fileName: 'ComputerNetwork.pptx',
+            fileType: 'Tài liệu Powerpoint',
+            date: '12:20 22/10/2024',
+            size: '3.769MB',
+        },
+        {
+            icon: faFileExcel,
+            fileName: 'BangDiem.xlsx',
+            fileType: 'Tài liệu Excel',
+            date: '23:25 10/07/2024',
+            size: '3.33302MB',
+        },
+        {
+            icon: faFilePdf,
+            fileName: 'Lab_report_EmbeddedSystem.pdf',
+            fileType: 'Tài liệu PDF',
+            date: '12:20 22/10/2024',
+            size: '1.102MB',
+        },
+        {
+            icon: faFileWord,
+            fileName: 'Lab_test_DistributeSystem.doc',
+            fileType: 'Tài liệu Word',
+            date: '14:24 12/09/2024',
+            size: '5.222MB',
+        },
+        {
+            icon: faFilePowerpoint,
+            fileName: 'ComputerNetwork.pptx',
+            fileType: 'Tài liệu Powerpoint',
+            date: '12:20 22/10/2024',
+            size: '3.769MB',
+        },
+        {
+            icon: faFileExcel,
+            fileName: 'BangDiem.xlsx',
+            fileType: 'Tài liệu Excel',
+            date: '23:25 10/07/2024',
+            size: '3.33302MB',
+        },
+        {
+            icon: faFilePdf,
+            fileName: 'Lab_report_EmbeddedSystem.pdf',
+            fileType: 'Tài liệu PDF',
+            date: '12:20 22/10/2024',
+            size: '1.102MB',
+        },
+        {
+            icon: faFileWord,
+            fileName: 'Lab_test_DistributeSystem.doc',
+            fileType: 'Tài liệu Word',
+            date: '14:24 12/09/2024',
+            size: '5.222MB',
+        },
+        {
+            icon: faFilePowerpoint,
+            fileName: 'ComputerNetwork.pptx',
+            fileType: 'Tài liệu Powerpoint',
+            date: '12:20 22/10/2024',
+            size: '3.769MB',
+        },
+        {
+            icon: faFileExcel,
+            fileName: 'BangDiem.xlsx',
+            fileType: 'Tài liệu Excel',
+            date: '23:25 10/07/2024',
+            size: '3.33302MB',
+        },
+        {
+            icon: faFilePdf,
+            fileName: 'Lab_report_EmbeddedSystem.pdf',
+            fileType: 'Tài liệu PDF',
+            date: '12:20 22/10/2024',
+            size: '1.102MB',
+        },
+        {
+            icon: faFileWord,
+            fileName: 'Lab_test_DistributeSystem.doc',
+            fileType: 'Tài liệu Word',
+            date: '14:24 12/09/2024',
+            size: '5.222MB',
+        },
+        {
+            icon: faFilePowerpoint,
+            fileName: 'ComputerNetwork.pptx',
+            fileType: 'Tài liệu Powerpoint',
+            date: '12:20 22/10/2024',
+            size: '3.769MB',
+        },
+        {
+            icon: faFileExcel,
+            fileName: 'BangDiem.xlsx',
+            fileType: 'Tài liệu Excel',
+            date: '23:25 10/07/2024',
+            size: '3.33302MB',
+        },
+    ];
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [acceptedFiles, setAcceptedFiles] = useState([]);
-
-    useEffect(() => {
-        localStorage.setItem('tableData', JSON.stringify(tableData));
-    }, [tableData]);
-
     const openModal = () => {
         setModalIsOpen(true);
     };
@@ -36,64 +142,21 @@ function Document() {
     };
 
     const handleAddFiles = () => {
-        const newFilesData = acceptedFiles.map((file) => {
-            const fileExtension = file.name.split('.').pop().toLowerCase();
+        // Thực hiện thêm file ở đây nếu cần
+        console.log('Thêm file:', acceptedFiles);
 
-            let fileType = 'Tài liệu khác';
-            let icon = faFile;
-
-            switch (fileExtension) {
-                case 'pdf':
-                    fileType = 'Tài liệu PDF';
-                    icon = faFilePdf;
-                    break;
-                case 'doc':
-                case 'docx':
-                    fileType = 'Tài liệu Word';
-                    icon = faFileWord;
-                    break;
-                case 'xls':
-                case 'xlsx':
-                    fileType = 'Tài liệu Excel';
-                    icon = faFileExcel;
-                    break;
-                case 'ppt':
-                case 'pptx':
-                    fileType = 'Tài liệu PowerPoint';
-                    icon = faFilePowerpoint;
-                    break;
-                default:
-                    fileType = 'Tài liệu khác';
-                    icon = faFile;
-                    break;
-            }
-
-            return {
-                icon,
-                fileName: file.name,
-                fileType,
-                date: new Date().toLocaleString(),
-                size: `${(file.size / (1024 * 1024)).toFixed(3)} MB`,
-            };
-        });
-
-        setTableData((prevTableData) => [...prevTableData, ...newFilesData]);
+        // Reset danh sách file đã chọn
         setAcceptedFiles([]);
         closeModal();
     };
 
-    const handleDeleteFile = (index) => {
-        setTableData((prevTableData) => prevTableData.filter((_, i) => i !== index));
-    };
-
     const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
     return (
         <div>
             <div className={cx('wrapper')}>
                 <Modal
                     isOpen={modalIsOpen}
-                    onRequestClose={closeModal}
+                    onRequestClose={closeModal} // Đóng modal khi nhấn ngoài hoặc nhấn ESC
                     contentLabel="Upload Files"
                     className={cx('modal')}
                     overlayClassName={cx('modal-overlay')}
@@ -103,6 +166,7 @@ function Document() {
                         <p className={cx('title')}>
                             Kéo và thả tệp hoặc <span className={cx('underline')}>Duyệt tệp</span>
                         </p>
+
                         <p>Định dạng hỗ trợ: .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx</p>
                     </div>
 
@@ -122,13 +186,12 @@ function Document() {
                         Thêm
                     </Button>
                 </Modal>
-
                 <h2>TỆP CỦA TÔI</h2>
 
                 <div className={`${cx('document-table')}`}>
                     <div className={cx('header-table')}>
                         <Button onClick={openModal} className={cx('add-btn')}>
-                            <FontAwesomeIcon icon={faPlus} /> Thêm mới
+                            <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon> Thêm mới
                         </Button>
                         <div className={cx('header-table-menu')}>
                             <Button className={cx('menu-btn')}>
@@ -146,8 +209,7 @@ function Document() {
                                 <th>Tên tệp</th>
                                 <th>Kiểu tệp</th>
                                 <th>Ngày tải lên</th>
-                                <th>Kích cỡ</th>
-                                <th>Hành động</th>
+                                <th>Kích cỡ </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -160,11 +222,6 @@ function Document() {
                                     <td>{row.fileType}</td>
                                     <td>{row.date}</td>
                                     <td>{row.size}</td>
-                                    <td>
-                                        <Button className={cx('delete-btn')} onClick={() => handleDeleteFile(index)}>
-                                            <FontAwesomeIcon icon={faTrash} /> Xóa
-                                        </Button>
-                                    </td>
                                 </tr>
                             ))}
                         </tbody>

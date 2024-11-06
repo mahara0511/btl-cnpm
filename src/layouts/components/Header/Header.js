@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,7 +19,6 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-
 import config from '~/config';
 import Button from '~/components/Button';
 import styles from './Header.module.scss';
@@ -26,6 +27,7 @@ import { InboxIcon, MessageIcon, UploadIcon } from '~/components/Icons';
 import images from '~/assets/images';
 import Image from '~/components/Image';
 import Search from '../Search';
+import { usePaperCount } from '~/components/Provider';
 
 const cx = classNames.bind(styles);
 
@@ -61,6 +63,16 @@ const MENU_ITEMS = [
 ];
 
 function Header() {
+    const { paperCount, updatePaperCount } = usePaperCount();
+
+    // Retrieve paper count from localStorage
+    useEffect(() => {
+        const storedPaperCount = localStorage.getItem('paperCount');
+        if (storedPaperCount) {
+            updatePaperCount(parseInt(storedPaperCount, 10));
+        }
+    }, []);
+
     const location = useLocation();
     const currentUser = true;
     const isActive = (path) => location.pathname === path;
@@ -85,12 +97,12 @@ function Header() {
             title: 'Get Pages',
             to: '/buy',
         },
+        ...MENU_ITEMS,
         {
             icon: <FontAwesomeIcon icon={faGear} />,
             title: 'Settings',
             to: '/settings',
         },
-        ...MENU_ITEMS,
         {
             icon: <FontAwesomeIcon icon={faSignOut} />,
             title: 'Log out',
@@ -200,7 +212,7 @@ function Header() {
                 </div>
                 <div className={cx('menu')}>
                     <Button className={cx('menu-balance')} to={config.routes.buy} outline>
-                        <FontAwesomeIcon icon={faFile} className={cx('file-icon')} /> 500 Tờ
+                        <FontAwesomeIcon icon={faFile} className={cx('file-icon')} /> {paperCount} Tờ
                     </Button>
                     <Menu items={currentUser ? userMenu : MENU_ITEMS} onChange={handleMenuChange}>
                         {currentUser ? (

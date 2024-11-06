@@ -15,6 +15,7 @@ const cx = classNames.bind(styles);
 function History() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [acceptedFiles, setAcceptedFiles] = useState([]);
+
     const openModal = () => {
         setModalIsOpen(true);
     };
@@ -28,26 +29,171 @@ function History() {
     };
 
     const handleAddFiles = () => {
-        // Thực hiện thêm file ở đây nếu cần
         console.log('Thêm file:', acceptedFiles);
-
-        // Reset danh sách file đã chọn
         setAcceptedFiles([]);
         closeModal();
     };
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+    // Dữ liệu giả lập cho các hàng trong bảng
+    const tableData = [
+        {
+            startTime: '12:20 22/10/2024',
+            endTime: '12:59 22/10/2024',
+            fileName: 'Lab_report_EmbeddedSystem.pdf',
+            printer: 'CLSTK-B2-LAU01',
+            totalPages: 5,
+        },
+        {
+            startTime: '14:24 12/09/2024',
+            endTime: '14:59 12/09/2024',
+            fileName: 'Lab_test_DistributeSystem.doc',
+            printer: 'CLSTK-A1-LAU01',
+            totalPages: 6,
+        },
+        {
+            startTime: '12:20 22/10/2024',
+            endTime: '12:59 22/10/2024',
+            fileName: 'ComputerNetwork.pptx',
+            printer: 'CLSTK-F2-LAU01',
+            totalPages: 1,
+        },
+        {
+            startTime: '23:25 10/07/2024',
+            endTime: '23:59 10/07/2024',
+            fileName: 'BangDiem.xlsx',
+            printer: 'CLSTK-D2-LAU01',
+            totalPages: 5,
+        },
+        {
+            startTime: '12:20 22/10/2024',
+            endTime: '12:59 22/10/2024',
+            fileName: 'Lab_report_EmbeddedSystem.pdf',
+            printer: 'CLSTK-B2-LAU01',
+            totalPages: 5,
+        },
+        {
+            startTime: '14:24 12/09/2024',
+            endTime: '14:59 12/09/2024',
+            fileName: 'Lab_test_DistributeSystem.doc',
+            printer: 'CLSTK-A1-LAU01',
+            totalPages: 6,
+        },
+        {
+            startTime: '12:20 22/10/2024',
+            endTime: '12:59 22/10/2024',
+            fileName: 'ComputerNetwork.pptx',
+            printer: 'CLSTK-F2-LAU01',
+            totalPages: 1,
+        },
+        {
+            startTime: '23:25 10/07/2024',
+            endTime: '23:59 10/07/2024',
+            fileName: 'BangDiem.xlsx',
+            printer: 'CLSTK-D2-LAU01',
+            totalPages: 5,
+        },
+        {
+            startTime: '12:20 22/10/2024',
+            endTime: '12:59 22/10/2024',
+            fileName: 'Lab_report_EmbeddedSystem.pdf',
+            printer: 'CLSTK-B2-LAU01',
+            totalPages: 5,
+        },
+        {
+            startTime: '14:24 12/09/2024',
+            endTime: '14:59 12/09/2024',
+            fileName: 'Lab_test_DistributeSystem.doc',
+            printer: 'CLSTK-A1-LAU01',
+            totalPages: 6,
+        },
+        {
+            startTime: '12:20 22/10/2024',
+            endTime: '12:59 22/10/2024',
+            fileName: 'ComputerNetwork.pptx',
+            printer: 'CLSTK-F2-LAU01',
+            totalPages: 1,
+        },
+        {
+            startTime: '23:25 10/07/2024',
+            endTime: '23:59 10/07/2024',
+            fileName: 'BangDiem.xlsx',
+            printer: 'CLSTK-D2-LAU01',
+            totalPages: 5,
+        },
+        {
+            startTime: '12:20 22/10/2024',
+            endTime: '12:59 22/10/2024',
+            fileName: 'Lab_report_EmbeddedSystem.pdf',
+            printer: 'CLSTK-B2-LAU01',
+            totalPages: 5,
+        },
+        {
+            startTime: '14:24 12/09/2024',
+            endTime: '14:59 12/09/2024',
+            fileName: 'Lab_test_DistributeSystem.doc',
+            printer: 'CLSTK-A1-LAU01',
+            totalPages: 6,
+        },
+        {
+            startTime: '12:20 22/10/2024',
+            endTime: '12:59 22/10/2024',
+            fileName: 'ComputerNetwork.pptx',
+            printer: 'CLSTK-F2-LAU01',
+            totalPages: 1,
+        },
+        {
+            startTime: '23:25 10/07/2024',
+            endTime: '23:59 10/07/2024',
+            fileName: 'BangDiem.xlsx',
+            printer: 'CLSTK-D2-LAU01',
+            totalPages: 5,
+        },
+        {
+            startTime: '12:20 22/10/2024',
+            endTime: '12:59 22/10/2024',
+            fileName: 'Lab_report_EmbeddedSystem.pdf',
+            printer: 'CLSTK-B2-LAU01',
+            totalPages: 5,
+        },
+        {
+            startTime: '14:24 12/09/2024',
+            endTime: '14:59 12/09/2024',
+            fileName: 'Lab_test_DistributeSystem.doc',
+            printer: 'CLSTK-A1-LAU01',
+            totalPages: 6,
+        },
+        {
+            startTime: '12:20 22/10/2024',
+            endTime: '12:59 22/10/2024',
+            fileName: 'ComputerNetwork.pptx',
+            printer: 'CLSTK-F2-LAU01',
+            totalPages: 1,
+        },
+        {
+            startTime: '23:25 10/07/2024',
+            endTime: '23:59 10/07/2024',
+            fileName: 'BangDiem.xlsx',
+            printer: 'CLSTK-D2-LAU01',
+            totalPages: 5,
+        },
+        // Các hàng khác...
+    ];
+
+    // Tính tổng số trang đã in
+    const totalPrintedPages = tableData.reduce((acc, row) => acc + row.totalPages, 0);
+
     return (
         <div>
             <div className={cx('wrapper')}>
                 <h2>LỊCH SỬ IN</h2>
-
                 <div className={`${cx('document-table')}`}>
                     <div className={cx('header-table')}>
                         <span> Từ </span>
-                        <Button> 12:30 10/09/2024 </Button>
-                        <span> Đến </span>
-                        <Button> 12:30 10/10/2024 </Button>
+                        <Button className={cx('header-table-btn')}> 12:30 10/09/2024 </Button>
+                        <span> đến </span>
+                        <Button className={cx('header-table-btn')}> 12:30 10/10/2024 </Button>
                     </div>
                     <table className={`${cx('custom-table')} table`}>
                         <thead>
@@ -60,164 +206,19 @@ function History() {
                             </tr>
                         </thead>
                         <tbody>
+                            {tableData.map((row, index) => (
+                                <tr key={index}>
+                                    <td>{row.startTime}</td>
+                                    <td>{row.endTime}</td>
+                                    <td>{row.fileName}</td>
+                                    <td>{row.printer}</td>
+                                    <td>{row.totalPages}</td>
+                                </tr>
+                            ))}
                             <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFilePdf} className={cx('file-icon')} />
-                                    Lab_report_EmbeddedSystem.pdf
-                                </td>
-                                <td>Tài liệu PDF</td>
-                                <td>12:20 22/10/2024</td>
-                                <td>1.102MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFileWord} className={cx('file-icon')} />
-                                    Lab_test_DistributeSystem.doc
-                                </td>
-                                <td>Tài liệu Word</td>
-                                <td>14:24 12/09/2024</td>
-                                <td>5.222MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFilePowerpoint} className={cx('file-icon')} />
-                                    ComputerNetwork.pptx
-                                </td>
-                                <td>Tài liệu Powerpoint</td>
-                                <td>12:20 22/10/2024</td>
-                                <td>3.769MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFileExcel} className={cx('file-icon')} />
-                                    BangDiem.xlsx
-                                </td>
-                                <td>Tài liệu Excel</td>
-                                <td>23:25 10/07/2024</td>
-                                <td>3.33302MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFilePdf} className={cx('file-icon')} />
-                                    Lab_report_EmbeddedSystem.pdf
-                                </td>
-                                <td>Tài liệu PDF</td>
-                                <td>12:20 22/10/2024</td>
-                                <td>1.102MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFileWord} className={cx('file-icon')} />
-                                    Lab_test_DistributeSystem.doc
-                                </td>
-                                <td>Tài liệu Word</td>
-                                <td>14:24 12/09/2024</td>
-                                <td>5.222MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFilePowerpoint} className={cx('file-icon')} />
-                                    ComputerNetwork.pptx
-                                </td>
-                                <td>Tài liệu Powerpoint</td>
-                                <td>12:20 22/10/2024</td>
-                                <td>3.769MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFileExcel} className={cx('file-icon')} />
-                                    BangDiem.xlsx
-                                </td>
-                                <td>Tài liệu Excel</td>
-                                <td>23:25 10/07/2024</td>
-                                <td>3.33302MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFilePdf} className={cx('file-icon')} />
-                                    Lab_report_EmbeddedSystem.pdf
-                                </td>
-                                <td>Tài liệu PDF</td>
-                                <td>12:20 22/10/2024</td>
-                                <td>1.102MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFileWord} className={cx('file-icon')} />
-                                    Lab_test_DistributeSystem.doc
-                                </td>
-                                <td>Tài liệu Word</td>
-                                <td>14:24 12/09/2024</td>
-                                <td>5.222MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFilePowerpoint} className={cx('file-icon')} />
-                                    ComputerNetwork.pptx
-                                </td>
-                                <td>Tài liệu Powerpoint</td>
-                                <td>12:20 22/10/2024</td>
-                                <td>3.769MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFileExcel} className={cx('file-icon')} />
-                                    BangDiem.xlsx
-                                </td>
-                                <td>Tài liệu Excel</td>
-                                <td>23:25 10/07/2024</td>
-                                <td>3.33302MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFilePdf} className={cx('file-icon')} />
-                                    Lab_report_EmbeddedSystem.pdf
-                                </td>
-                                <td>Tài liệu PDF</td>
-                                <td>12:20 22/10/2024</td>
-                                <td>1.102MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFileWord} className={cx('file-icon')} />
-                                    Lab_test_DistributeSystem.doc
-                                </td>
-                                <td>Tài liệu Word</td>
-                                <td>14:24 12/09/2024</td>
-                                <td>5.222MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFilePowerpoint} className={cx('file-icon')} />
-                                    ComputerNetwork.pptx
-                                </td>
-                                <td>Tài liệu Powerpoint</td>
-                                <td>12:20 22/10/2024</td>
-                                <td>3.769MB</td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <FontAwesomeIcon icon={faFileExcel} className={cx('file-icon')} />
-                                    BangDiem.xlsx
-                                </td>
-                                <td>Tài liệu Excel</td>
-                                <td>23:25 10/07/2024</td>
-                                <td>3.33302MB</td>
+                                <td colSpan="3"></td>
+                                <td>Tổng cộng</td>
+                                <td>{totalPrintedPages}</td>
                             </tr>
                         </tbody>
                     </table>

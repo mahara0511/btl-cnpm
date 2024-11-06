@@ -15,7 +15,7 @@ function Home() {
             </div>
             <div className={`${cx('home-content')} row`}>
                 <div className={`${cx('price-table')} col-md-7`}>
-                    <h3>Bảng Giá</h3>
+                    <h3>BẢNG GIÁ</h3>
                     <table className={`${cx('custom-table')} table`}>
                         <thead>
                             <tr>

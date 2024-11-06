@@ -1,0 +1,240 @@
+// PrintingService.module.scss
+
+.app {
+    width: 85%;
+    text-align: center;
+    margin: auto;
+    font-family: Lato, sans-serif;
+}
+
+.app-header {
+    h1 {
+        color: var(--primary);
+        font-weight: 500;
+        font-size: 22px;
+        margin-top: 10px;
+        font-weight: 700;
+        text-align: center;
+    }
+}
+
+.print-header {
+    .print-options {
+        display: flex;
+        justify-content: space-between;
+        .option-group {
+            position: relative;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            padding: 4px;
+            label {
+                padding-left: 4px;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 12px;
+                font-weight: 600;
+                select,
+                .input-file,
+                input {
+                    // width: 100px;
+                    height: 30px;
+                    border: 1px solid #989898;
+                    border-radius: 6px;
+                    background-color: #d9d9d9;
+                }
+
+                input {
+                    width: 70px;
+                    text-align: center;
+                }
+                .input-file {
+                    padding-left: 10px;
+                    margin-bottom: 0;
+                    margin-left: 5px;
+                    width: 200px;
+                    height: 30px; // Match the input height for centering
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    cursor: pointer;
+                }
+                select {
+                    width: 200px;
+                    font-weight: 600;
+                    padding: 0 10px;
+                    appearance: none; /* Ẩn mũi tên mặc định */
+                    outline: none;
+                    cursor: pointer;
+                    option {
+                        background-color: var(--white);
+                        border-radius: none;
+                        cursor: pointer;
+                    }
+                }
+                .chevron-icon {
+                    position: absolute;
+                    right: 15px;
+                }
+            }
+        }
+        .option-group:nth-child(2n + 1) {
+            width: 30%;
+        }
+        .option-group:nth-child(2n) {
+            width: 18%;
+        }
+    }
+}
+
+.content {
+    margin-top: 20px;
+    display: flex;
+    font-size: 14px;
+
+    .print-settings {
+        width: 30%;
+        background-color: #fff;
+        border: 1px solid #989898;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        font-weight: 600;
+        .print-options {
+            margin-bottom: 20px;
+            h2 {
+                text-align: left;
+                font-size: 14px;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+            .options {
+                margin: 0 auto 15px;
+                width: 90%;
+                position: relative;
+
+                label {
+                    display: block;
+                    margin-bottom: 5px;
+                    font-weight: bold;
+                    text-align: left;
+                }
+                select {
+                    height: 35px;
+                    border: 1px solid #989898;
+                    border-radius: 6px;
+                    background-color: #d9d9d9;
+                    width: 100%;
+                    font-weight: 600;
+                    appearance: none; /* Ẩn mũi tên mặc định */
+                    padding: 0 10px;
+                    cursor: pointer;
+                    option {
+                        background-color: var(--white);
+                        border-radius: none;
+                        cursor: pointer;
+                    }
+                }
+                .chevron-icon {
+                    position: absolute;
+                    right: 15px;
+                    top: 37px;
+                    font-size: 12px;
+                }
+                .file-name {
+                    font-style: italic;
+                    margin-left: 10px;
+                }
+
+                .options-content {
+                    display: flex;
+                    align-items: center;
+                    .options-item {
+                        width: 50%;
+                        text-align: left;
+                        margin: 5px 0 0 8px;
+                        display: flex;
+                        align-items: center;
+                        input {
+                            margin-right: 4px;
+                        }
+                    }
+                }
+            }
+
+            .options:nth-child(6),
+            .options:nth-child(5) {
+                .options-content {
+                    flex-direction: column;
+                    .options-item {
+                        width: 100%;
+                        text-align: left;
+                        margin: 5px 0 0 8px;
+                        display: flex;
+                        align-items: center;
+                        input {
+                            margin-right: 4px;
+                        }
+
+                        input[type='number'] {
+                            margin-left: 4px;
+                            width: 24px;
+                        }
+
+                        input[type='text'] {
+                            margin-left: 4px;
+                        }
+                        label {
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .print-preview {
+        width: 70%;
+        margin-left: 5px;
+        border: 1px solid #d9d9d9;
+        .print-preview-container {
+            h2 {
+                text-align: left;
+                font-size: 14px;
+                margin: 10px;
+                font-weight: 600;
+            }
+            .document-preview {
+                border: 1px dashed #989898;
+                padding: 10px 10px;
+                margin-top: 10px;
+                background-color: #fafafa;
+
+                .file-content {
+                    width: 50px; // Đặt chiều rộng tối thiểu cho Viewer
+                    height: 50px; // Đặt chiều cao tối thiểu cho Viewer
+                }
+            }
+        }
+    }
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    .print-button {
+        background-color: var(--primary);
+        color: var(--white);
+        border: none;
+        padding: 5px 40px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: opacity 0.3s;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+}

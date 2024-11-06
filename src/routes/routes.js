@@ -7,8 +7,8 @@ import { HeaderOnly } from '~/layouts';
 import Home from '~/pages/Home';
 import Login from '~/pages/Login';
 import Document from '~/pages/Document';
-import Print from '~/pages/Upload';
-import Buy from '~/pages/Search';
+import Print from '~/pages/Print';
+import Buy from '~/pages/Buy';
 import History from '~/pages/History';
 
 // Layout

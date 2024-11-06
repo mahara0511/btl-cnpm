@@ -1,0 +1,65 @@
+.print-wrapper {
+    margin-bottom: 100px;
+    .status-pending {
+        color: #007bff !important;
+    }
+
+    .status-success {
+        color: #28a745 !important;
+    }
+
+    .status-cancelled {
+        color: #dc3545 !important;
+    }
+
+    .purchase-header {
+        color: var(--primary);
+        font-weight: 500;
+        font-size: 22px;
+        margin-top: 10px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .table {
+        text-align: center;
+        border: 1px solid #d9d9d9;
+        padding: 0 10px;
+        h3 {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .custom-table {
+            border: 1px solid #d9d9d9;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .custom-table thead tr {
+            color: var(--text-color); /* Màu chữ cho hàng tiêu đề */
+
+            th {
+                background-color: #d9d9d9;
+            }
+        }
+
+        .custom-table tbody tr {
+            background-color: var(--white); /* Màu nền cho các hàng trong thân bảng */
+        }
+    }
+    .purchase-section {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+    }
+    .pay-btn {
+        height: 35px;
+        margin-top: 40px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+}
