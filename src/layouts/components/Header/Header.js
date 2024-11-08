@@ -27,7 +27,7 @@ import { InboxIcon, MessageIcon, UploadIcon } from '~/components/Icons';
 import images from '~/assets/images';
 import Image from '~/components/Image';
 import Search from '../Search';
-import { usePaperCount } from '~/components/Provider';
+import { useProvider } from '~/components/Provider';
 
 const cx = classNames.bind(styles);
 
@@ -63,7 +63,7 @@ const MENU_ITEMS = [
 ];
 
 function Header() {
-    const { paperCount, updatePaperCount } = usePaperCount();
+    const { paperCount, updatePaperCount } = useProvider();
 
     // Retrieve paper count from localStorage
     useEffect(() => {

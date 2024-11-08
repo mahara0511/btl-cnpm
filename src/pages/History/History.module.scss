@@ -57,6 +57,13 @@
                         background-color: #09376b43; /* Màu nền cho hàng cuối */
                     }
                 }
+
+                .no-file {
+                    td {
+                        background-color: var(--white) !important;
+                        padding: 20px 0;
+                    }
+                }
             }
         }
     }

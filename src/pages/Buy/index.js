@@ -3,16 +3,16 @@ import Modal from 'react-modal';
 import styles from './Buy.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faBars, faTable, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { faFilePdf, faFilePowerpoint, faFileWord, faFileExcel, faFile } from '@fortawesome/free-regular-svg-icons';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+// import { faFilePdf, faFilePowerpoint, faFileWord, faFileExcel, faFile } from '@fortawesome/free-regular-svg-icons';
 import { useDropzone } from 'react-dropzone';
 import Button from '~/components/Button';
-import { usePaperCount } from '~/components/Provider';
+import { useProvider } from '~/components/Provider';
 
 const cx = classNames.bind(styles);
 
 function Buy() {
-    const { paperCount, updatePaperCount } = usePaperCount();
+    const { paperCount, updatePaperCount } = useProvider();
 
     const priceTable = [
         {
@@ -94,7 +94,8 @@ function Buy() {
                 'status-color': 'status-success',
             };
             setleftOfPages((prev) => prev - numberOfPages);
-            // updatePaperCount(paperCount + numberOfPages);
+            updatePaperCount(paperCount + parseInt(numberOfPages));
+            alert('THANH TOÁN THÀNH CÔNG');
         } else {
             newEntry = {
                 time: currentTime,
@@ -184,6 +185,7 @@ function Buy() {
                                             <option>VN Pay</option>
                                             <option>Zalo Pay</option>
                                         </select>
+                                        <FontAwesomeIcon icon={faChevronDown} className={cx('chevron-icon')} />
                                     </div>
                                     <Button slim primary className={cx('pay-btn')} onClick={handlePayment}>
                                         Thanh toán

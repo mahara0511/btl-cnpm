@@ -177,13 +177,13 @@
                             margin-right: 4px;
                         }
 
-                        input[type='number'] {
-                            margin-left: 4px;
-                            width: 24px;
-                        }
-
-                        input[type='text'] {
-                            margin-left: 4px;
+                        input[type='string'] {
+                            margin-left: 10px;
+                            height: 35px;
+                            border: 1px solid #989898;
+                            border-radius: 6px;
+                            background-color: #d9d9d9;
+                            text-align: center;
                         }
                         label {
                             margin: 0;

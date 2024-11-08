@@ -8,25 +8,88 @@ import Button from '~/components/Button';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import { useProvider } from '~/components/Provider';
 
 const cx = classNames.bind(styles);
 function Print() {
-    const [fileContent, setFileContent] = useState('');
+    const { addHistory } = useProvider();
+
     const [fileUrl, setFileUrl] = useState(null);
     const [fileName, setFileName] = useState('Không có tệp nào được chọn');
     const [copies, setCopies] = useState(1);
     const [printer, setPrinter] = useState('');
     const [pages, setPages] = useState(33);
+    const [paperSize, setPaperSize] = useState('A4');
+    const [sides, setSides] = useState('1 mặt');
+    const [orientation, setOrientation] = useState('Khổ dọc');
+    const [scaling, setScaling] = useState('100%');
+    const [pageSelection, setPageSelection] = useState('2-10');
+    const [pagesPerSheet, setPagesPerSheet] = useState(1);
+
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
 
         setFileName(file.name);
 
-        if (file && file.type === 'application/pdf') {
+        if (file) {
             const fileUrl = URL.createObjectURL(file);
             setFileUrl(fileUrl);
             console.log(fileUrl);
+        }
+    };
+
+    const validateForm = () => {
+        if (!fileUrl) {
+            alert('Vui lòng chọn tệp trước khi in.');
+            return false;
+        }
+        if (copies < 1) {
+            alert('Số bản in phải lớn hơn 0.');
+            return false;
+        }
+        if (!printer) {
+            alert('Vui lòng chọn máy in.');
+            return false;
+        }
+        if (pages < 1) {
+            alert('Số trang sử dụng phải lớn hơn 0.');
+            return false;
+        }
+        if (sides !== '1 mặt' && sides !== '2 mặt') {
+            alert('Số mặt giấy phải là "1 mặt" hoặc "2 mặt".');
+            return false;
+        }
+
+        if (orientation !== 'Khổ dọc' && orientation !== 'Khổ ngang') {
+            alert('Khổ in phải là "Khổ dọc" hoặc "Khổ ngang".');
+            return false;
+        }
+
+        // const scalingValue = parseInt(scaling.replace('%', ''));
+        if (!scaling) {
+            alert('Chọn trường thu phóng');
+            return false;
+        }
+
+        // Validate page selection (e.g., "2-10", "1,3,5", etc.)
+        if (!pageSelection) {
+            alert('Chọn trang in');
+            return false;
+        }
+
+        if (![1, 2, 4].includes(pagesPerSheet)) {
+            alert('Số trang mỗi tờ phải là 1, 2 hoặc 4.');
+            return false;
+        }
+        return true;
+    };
+
+    const handlePrint = () => {
+        if (validateForm()) {
+            // Logic để thực hiện in ấn
+            addHistory(fileName, printer, pages);
+            alert('In Thành công!');
         }
     };
 
@@ -63,10 +126,10 @@ function Print() {
                             3. Chọn máy in:
                             <select value={printer} onChange={(e) => setPrinter(e.target.value)}>
                                 <option value="">Chọn máy in</option>
-                                <option value="printer1">CLSTK-B2-LAU01</option>
-                                <option value="printer2">CLSTK-A1-LAU01</option>
-                                <option value="printer3">CLSTK-F2-LAU01</option>
-                                <option value="printer4">CLSTK-D2-LAU01</option>
+                                <option value="CLSTK-B2-LAU01">CLSTK-B2-LAU01</option>
+                                <option value="CLSTK-A1-LAU01">CLSTK-A1-LAU01</option>
+                                <option value="CLSTK-F2-LAU01">CLSTK-F2-LAU01</option>
+                                <option value="CLSTK-D2-LAU01">CLSTK-D2-LAU01</option>
                             </select>
                             <FontAwesomeIcon icon={faChevronDown} className={cx('chevron-icon')} />
                         </label>
@@ -83,78 +146,160 @@ function Print() {
                 <div className={cx('print-settings')}>
                     <div className={cx('print-options')}>
                         <h2>5. Chỉnh thông số in:</h2>
+
                         <div className={cx('options')}>
                             <label>5.1. Cỡ giấy</label>
-                            <select>
-                                <option>A4</option>
-                                <option>A3</option>
-                                <option>A5</option>
+                            <select value={paperSize} onChange={(e) => setPaperSize(e.target.value)}>
+                                <option value="A4">A4</option>
+                                <option value="A3">A3</option>
+                                <option value="A5">A5</option>
                             </select>
                             <FontAwesomeIcon icon={faChevronDown} className={cx('chevron-icon')} />
                         </div>
+
                         <div className={cx('options')}>
                             <label>5.2. Số mặt giấy:</label>
                             <div className={cx('options-content')}>
                                 <div className={cx('options-item')}>
-                                    <input type="radio" name="sides" /> 1 mặt
+                                    <input
+                                        type="radio"
+                                        name="sides"
+                                        value="1 mặt"
+                                        checked={sides === '1 mặt'}
+                                        onChange={(e) => setSides(e.target.value)}
+                                    />{' '}
+                                    1 mặt
                                 </div>
                                 <div className={cx('options-item')}>
-                                    <input type="radio" name="sides" /> 2 mặt
+                                    <input
+                                        type="radio"
+                                        name="sides"
+                                        value="2 mặt"
+                                        checked={sides === '2 mặt'}
+                                        onChange={(e) => setSides(e.target.value)}
+                                    />{' '}
+                                    2 mặt
                                 </div>
                             </div>
                         </div>
+
                         <div className={cx('options')}>
                             <label>5.3. Khổ in:</label>
                             <div className={cx('options-content')}>
                                 <div className={cx('options-item')}>
-                                    <input type="radio" name="orientation" /> Khổ dọc
+                                    <input
+                                        type="radio"
+                                        name="orientation"
+                                        value="Khổ dọc"
+                                        checked={orientation === 'Khổ dọc'}
+                                        onChange={(e) => setOrientation(e.target.value)}
+                                    />{' '}
+                                    Khổ dọc
                                 </div>
                                 <div className={cx('options-item')}>
-                                    <input type="radio" name="orientation" /> Khổ ngang{' '}
+                                    <input
+                                        type="radio"
+                                        name="orientation"
+                                        value="Khổ ngang"
+                                        checked={orientation === 'Khổ ngang'}
+                                        onChange={(e) => setOrientation(e.target.value)}
+                                    />{' '}
+                                    Khổ ngang
                                 </div>
                             </div>
                         </div>
+
                         <div className={cx('options')}>
                             <label>5.4. Thu phóng:</label>
-
                             <div className={cx('options-content')}>
                                 <div className={cx('options-item')}>
-                                    <input type="radio" name="scaling" /> Vừa với trang in
+                                    <input
+                                        type="radio"
+                                        name="scaling"
+                                        value="Vừa với trang in"
+                                        checked={scaling === 'Vừa với trang in'}
+                                        onChange={(e) => setScaling(e.target.value)}
+                                    />{' '}
+                                    Vừa với trang in
                                 </div>
                                 <div className={cx('options-item')}>
-                                    <input type="radio" name="scaling" /> Theo kích cỡ file gốc
+                                    <input
+                                        type="radio"
+                                        name="scaling"
+                                        value="Theo kích cỡ file gốc"
+                                        checked={scaling === 'Theo kích cỡ file gốc'}
+                                        onChange={(e) => setScaling(e.target.value)}
+                                    />{' '}
+                                    Theo kích cỡ file gốc
                                 </div>
                                 <div className={cx('options-item')}>
-                                    <label htmlFor="pagesNum">Tùy chỉnh: </label>
-                                    <input type="number" defaultValue="100" />%
+                                    <label htmlFor="customScaling">Tùy chỉnh:</label>
+                                    <input
+                                        type="string"
+                                        value={scaling}
+                                        onChange={(e) => setScaling(e.target.value)}
+                                        min="10"
+                                        max="200"
+                                        step="10"
+                                    />
                                 </div>
                             </div>
                         </div>
+
                         <div className={cx('options')}>
                             <label>5.5. Chọn trang in:</label>
-
                             <div className={cx('options-content')}>
                                 <div className={cx('options-item')}>
-                                    <input type="radio" name="pages" /> Tất cả
+                                    <input
+                                        type="radio"
+                                        name="pages"
+                                        value="Tất cả"
+                                        checked={pageSelection === 'Tất cả'}
+                                        onChange={(e) => setPageSelection(e.target.value)}
+                                    />{' '}
+                                    Tất cả
                                 </div>
                                 <div className={cx('options-item')}>
-                                    <input type="radio" name="pages" /> Chỉ in trang lẻ
+                                    <input
+                                        type="radio"
+                                        name="pages"
+                                        value="Chỉ in trang lẻ"
+                                        checked={pageSelection === 'Chỉ in trang lẻ'}
+                                        onChange={(e) => setPageSelection(e.target.value)}
+                                    />{' '}
+                                    Chỉ in trang lẻ
                                 </div>
                                 <div className={cx('options-item')}>
-                                    <input type="radio" name="pages" /> Chỉ in trang chẵn
+                                    <input
+                                        type="radio"
+                                        name="pages"
+                                        value="Chỉ in trang chẵn"
+                                        checked={pageSelection === 'Chỉ in trang chẵn'}
+                                        onChange={(e) => setPageSelection(e.target.value)}
+                                    />{' '}
+                                    Chỉ in trang chẵn
                                 </div>
                                 <div className={cx('options-item')}>
-                                    <label htmlFor="pagesNum">Tùy chỉnh: </label>
-                                    <input id="pagesNum" type="text" placeholder="ví dụ: 1-5, 8, 11-13" />
+                                    <label htmlFor="customScaling">Tùy chỉnh:</label>
+                                    <input
+                                        type="string"
+                                        value={pageSelection}
+                                        onChange={(e) => setPageSelection(e.target.value)}
+                                        min="10"
+                                        max="200"
+                                        step="10"
+                                    />
                                 </div>
+                                {/* Other options */}
                             </div>
                         </div>
+
                         <div className={cx('options')}>
                             <label>5.6. Số trang mỗi tờ:</label>
-                            <select>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>4</option>
+                            <select value={pagesPerSheet} onChange={(e) => setPagesPerSheet(Number(e.target.value))}>
+                                <option value={1}>1</option>
+                                <option value={2}>2</option>
+                                <option value={4}>4</option>
                             </select>
                             <FontAwesomeIcon icon={faChevronDown} className={cx('chevron-icon')} />
                         </div>
@@ -185,7 +330,9 @@ function Print() {
                 </div>
             </div>
             <footer>
-                <Button className={cx('print-button')}>In</Button>
+                <Button onClick={handlePrint} className={cx('print-button')}>
+                    In
+                </Button>
             </footer>
         </div>
     );
