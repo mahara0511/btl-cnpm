@@ -39,7 +39,6 @@ function Buy() {
         { min: 101, max: 1000, price: 300 },
         { min: 1001, max: Infinity, price: 250 },
     ];
-    const [leftOfPages, setleftOfPages] = useState(10000);
     const [numberOfPages, setNumberOfPages] = useState(1);
     const [totalPrice, setTotalPrice] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('BK Pay');
@@ -85,27 +84,16 @@ function Buy() {
         e.preventDefault();
         const currentTime = new Date().toLocaleString();
         let newEntry;
-        if (numberOfPages <= leftOfPages) {
-            newEntry = {
-                time: currentTime,
-                numberOfPages,
-                totalPrice,
-                status: 'Thành công', // Assume payment is successful
-                'status-color': 'status-success',
-            };
-            setleftOfPages((prev) => prev - numberOfPages);
-            updatePaperCount(paperCount + parseInt(numberOfPages));
-            alert('THANH TOÁN THÀNH CÔNG');
-        } else {
-            newEntry = {
-                time: currentTime,
-                numberOfPages,
-                totalPrice,
-                status: 'Đã hủy',
-                'status-color': 'status-cancelled',
-            };
-            alert('SỐ TRANG CÒN LẠI KHÔNG ĐỦ');
-        }
+        newEntry = {
+            time: currentTime,
+            numberOfPages,
+            totalPrice,
+            status: 'Đang chờ', // Assume payment is successful
+            'status-color': 'status-pending',
+        };
+        updatePaperCount(paperCount + parseInt(numberOfPages));
+        alert('Đã thêm đơn mua vào hàng chờ!');
+
         setHistoryTable((prevHistory) => [newEntry, ...prevHistory]);
     };
 
@@ -159,7 +147,7 @@ function Buy() {
                                 <form>
                                     <div className={`${cx('form-group')} form-group`}>
                                         <label>Số tờ khả dụng:</label>
-                                        <input type="text" className="form-control" value={leftOfPages} disabled />
+                                        <input type="text" className="form-control" value={paperCount} disabled />
                                     </div>
                                     <div className={`${cx('form-group')} form-group`}>
                                         <label>1. Nhập số tờ:</label>

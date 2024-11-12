@@ -161,8 +161,12 @@ function Document() {
                                     <td>{row.date}</td>
                                     <td>{row.size}</td>
                                     <td>
-                                        <Button className={cx('delete-btn')} onClick={() => handleDeleteFile(index)}>
-                                            <FontAwesomeIcon icon={faTrash} /> Xóa
+                                        <Button
+                                            leftIcon={<FontAwesomeIcon icon={faTrash} className={cx('delete-icon')} />}
+                                            className={cx('delete-btn')}
+                                            onClick={() => handleDeleteFile(index)}
+                                        >
+                                            <span> Xóa</span>
                                         </Button>
                                     </td>
                                 </tr>

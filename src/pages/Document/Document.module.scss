@@ -80,8 +80,14 @@
 
                         .delete-btn {
                             padding: 0;
-                            font-size: 14px;
+                            margin: 0;
+                            font-size: 12px;
+                            width: 4px;
                             color: red;
+                            .delete-icon {
+                                font-size: 12px;
+                                margin-right: 3px;
+                            }
                         }
                     }
                     td:first-child {
