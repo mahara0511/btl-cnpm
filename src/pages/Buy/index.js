@@ -91,7 +91,6 @@ function Buy() {
             status: 'Đang chờ', // Assume payment is successful
             'status-color': 'status-pending',
         };
-        updatePaperCount(paperCount + parseInt(numberOfPages));
         alert('Đã thêm đơn mua vào hàng chờ!');
 
         setHistoryTable((prevHistory) => [newEntry, ...prevHistory]);
@@ -110,6 +109,40 @@ function Buy() {
         const calculatedPrice = calculatePrice(numberOfPages);
         setTotalPrice(`${calculatedPrice.toLocaleString('en-US')}`);
     }, [numberOfPages]);
+
+    const handleStatusClick = (index, numberOfPages) => {
+        setHistoryTable((prevHistory) => {
+            const newHistory = [...prevHistory];
+            if (newHistory[index].status === 'Đang chờ') {
+                // Đảm bảo chỉ cập nhật nếu trạng thái chưa phải là 'Thành công'
+                newHistory[index] = {
+                    ...newHistory[index],
+                    status: 'Thành công',
+                    'status-color': 'status-success',
+                };
+
+                updatePaperCount(paperCount + parseInt(numberOfPages));
+            }
+
+            return newHistory;
+        });
+    };
+
+    const handleStatusDoubleClick = (index, numberOfPages) => {
+        setHistoryTable((prevHistory) => {
+            const newHistory = [...prevHistory];
+
+            if (newHistory[index].status !== 'Thành công') {
+                // Chưa thành công thì mới hủy được
+                newHistory[index] = {
+                    ...newHistory[index],
+                    status: 'Đã hủy',
+                    'status-color': 'status-cancelled',
+                };
+            }
+            return newHistory;
+        });
+    };
     return (
         <div className={`${cx('print-wrapper')} container`}>
             <h1 className={`${cx('purchase-header')} `}>MUA GIẤY</h1>
@@ -192,28 +225,43 @@ function Buy() {
 
                         <div className={`${cx('table')}`}>
                             <h3>LỊCH SỬ</h3>
-                            <table className={`${cx('custom-table')} table`}>
-                                <thead>
-                                    <tr>
-                                        <th>STT</th>
-                                        <th>Thời gian</th>
-                                        <th>Số lượng</th>
-                                        <th>Số tiền</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {historyTable.map((row, index) => (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{row.time}</td>
-                                            <td>{row.numberOfPages}</td>
-                                            <td>{`${row.totalPrice} VNĐ`}</td>
-                                            <td className={cx(row['status-color'])}>{row.status}</td>
+                            <div style={{ height: '571px', overflowY: 'auto' }}>
+                                <table className={`${cx('custom-table')} table`}>
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Thời gian</th>
+                                            <th>Số lượng</th>
+                                            <th>Số tiền</th>
+                                            <th>Trạng thái</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {historyTable.map((row, index) => (
+                                            <tr key={index}>
+                                                <td
+                                                    onDoubleClick={() =>
+                                                        handleStatusDoubleClick(index, row.numberOfPages)
+                                                    }
+                                                    style={{ cursor: 'pointer' }}
+                                                >
+                                                    {index + 1}
+                                                </td>
+                                                <td>{row.time}</td>
+                                                <td>{row.numberOfPages}</td>
+                                                <td>{`${row.totalPrice} VNĐ`}</td>
+                                                <td
+                                                    onClick={() => handleStatusClick(index, row.numberOfPages)}
+                                                    className={cx(row['status-color'])}
+                                                    style={{ cursor: 'pointer' }}
+                                                >
+                                                    {row.status}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

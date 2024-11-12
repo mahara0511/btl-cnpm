@@ -88,7 +88,8 @@ function Print() {
     const handlePrint = () => {
         if (validateForm()) {
             // Logic để thực hiện in ấn
-            addHistory(fileName, printer, pages);
+            const newPages = parseInt(pages);
+            addHistory(fileName, printer, newPages);
             alert('In Thành công!');
         }
     };

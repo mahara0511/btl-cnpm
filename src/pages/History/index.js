@@ -31,7 +31,7 @@ function History() {
         });
         setFilteredHistory(filtered);
     }, []);
-    const totalPrintedPages = history.reduce((acc, row) => acc + row.totalPages, 0);
+    const totalPrintedPages = history.reduce((acc, row) => acc + parseInt(row.totalPages), 0);
 
     return (
         <div>

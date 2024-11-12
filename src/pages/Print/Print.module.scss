@@ -194,6 +194,8 @@
         }
     }
     .print-preview {
+        height: 651px;
+        overflow-y: auto;
         width: 70%;
         margin-left: 5px;
         border: 1px solid #d9d9d9;

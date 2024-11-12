@@ -84,6 +84,9 @@
         border: 1px solid var(--primary);
         font-size: 12px;
         transition: background-color 0.3s;
+        .file-icon {
+            margin-right: 5px;
+        }
     }
 
     .menu-balance:hover {

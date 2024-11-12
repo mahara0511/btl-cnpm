@@ -14,13 +14,17 @@ export const Provider = ({ children }) => {
     };
 
     const addHistory = (fileName, printer, totalPages) => {
+        const startTime = new Date();
+        const endTime = new Date(startTime);
+        endTime.setSeconds(startTime.getSeconds() + 5); // Cộng thêm 5 giây vào endTime
         const newEntry = {
-            startTime: new Date().toLocaleString(),
-            endTime: new Date().toLocaleString(), // Có thể thay thế bằng thời gian thực tế
+            startTime: startTime.toLocaleString(),
+            endTime: endTime.toLocaleString(), // Có thể thay thế bằng thời gian thực tế
             fileName,
             printer,
             totalPages,
         };
+
         const newHistory = [...history, newEntry];
         setHistory(newHistory);
         localStorage.setItem('history', JSON.stringify(newHistory));
