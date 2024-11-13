@@ -10,7 +10,7 @@ import { getDocument } from 'pdfjs-dist/webpack';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { useProvider } from '~/components/Provider';
-
+import JSZip from 'jszip';
 const cx = classNames.bind(styles);
 function Print() {
     const { addHistory } = useProvider();
@@ -36,9 +36,21 @@ function Print() {
         if (file) {
             const fileUrl = URL.createObjectURL(file);
             setFileUrl(fileUrl);
-            const count = await countPdfPages(file);
+            const fileType = file.type;
+            console.log(file);
+            let count = 3;
+
+            if (fileType === 'application/pdf') {
+                // Đếm số trang PDF
+                count = await countPdfPages(file);
+            } else if (fileType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+                // Đếm số slide PPTX
+                count = await countSlides(file);
+            } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                // Đếm số đoạn văn trong DOCX
+                // count = await countDocxParagraphs(file);
+            }
             setPages(count);
-            console.log(count);
         }
     };
 
