@@ -11,6 +11,7 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { useProvider } from '~/components/Provider';
 import JSZip from 'jszip';
+import mammoth from 'mammoth';
 const cx = classNames.bind(styles);
 function Print() {
     const { addHistory } = useProvider();
@@ -24,9 +25,11 @@ function Print() {
     const [sides, setSides] = useState('1 mặt');
     const [orientation, setOrientation] = useState('Khổ dọc');
     const [scaling, setScaling] = useState('100%');
-    const [pageSelection, setPageSelection] = useState('2-10');
+    const [pageSelection, setPageSelection] = useState('2-3');
     const [pagesPerSheet, setPagesPerSheet] = useState(1);
     const [pageCount, setPageCount] = useState(0); // Trạng thái để lưu số trang dùng để in ra
+
+    // Xử lí khi file change
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -47,13 +50,23 @@ function Print() {
                 // Đếm số slide PPTX
                 count = await countSlides(file);
             } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-                // Đếm số đoạn văn trong DOCX
-                // count = await countDocxParagraphs(file);
+                mammoth
+                    .extractRawText({ arrayBuffer: file })
+                    .then((result) => {
+                        const text = result.value; // Extracted text from the .docx file
+                        const wordsPerPage = 300; // Average words per page, adjustable
+                        const wordCount = text.split(/\s+/).length;
+                        count = Math.ceil(wordCount / wordsPerPage);
+                    })
+                    .catch((error) => {
+                        console.error('Error reading Word file:', error);
+                    });
             }
             setPages(count);
         }
     };
 
+    // Tính toán số trang cần dùng để in ra
     useEffect(() => {
         let calculatedPages = pages;
         // Xử lý các điều kiện theo lựa chọn số mặt giấy
@@ -70,6 +83,20 @@ function Print() {
             calculatedPages = Math.ceil(calculatedPages / 2);
         } else if (pageSelection === 'Chỉ in trang chẵn') {
             calculatedPages = Math.floor(calculatedPages / 2);
+        } else if (pageSelection.includes('-')) {
+            // Handle cases like '2-8' or '8-2'
+            const [start, end] = pageSelection.split('-').map(Number);
+
+            if (start < end) {
+                // Ascending range, e.g., '2-8'
+                calculatedPages = end - start + 1;
+            } else {
+                // Descending range, e.g., '8-2'
+                calculatedPages = start - end + 1;
+            }
+        } else if (pageSelection.includes(',')) {
+            const pagesArray = pageSelection.split(',').map(Number);
+            calculatedPages = pagesArray.length;
         }
         // Nhân với số bản in
         calculatedPages = calculatedPages * copies;
@@ -97,6 +124,7 @@ function Print() {
         return slideFiles.length;
     };
 
+    // Kiểm tra dữ liệu nhập vào
     const validateForm = () => {
         if (!fileUrl) {
             alert('Vui lòng chọn tệp trước khi in.');
@@ -135,7 +163,39 @@ function Print() {
             alert('Chọn trang in');
             return false;
         }
+        const isValidFormat = /^(\d+-\d+|\d+(,\d+)*)$/.test(pageSelection);
+        // This allows formats like '2-8' or '1,3,5'
+        if (
+            !isValidFormat &&
+            pageSelection !== 'Tất cả' &&
+            pageSelection !== 'Chỉ in trang lẻ' &&
+            pageSelection !== 'Chỉ in trang chẵn'
+        ) {
+            alert(
+                'Định dạng trang in không hợp lệ. Vui lòng nhập theo dạng "2-8", "1,3,5" hoặc chọn một trong các tùy chọn.',
+            );
+            return false;
+        }
 
+        // Check that each page or range in pageSelection does not exceed the total number of pages
+        if (pageSelection.includes('-')) {
+            // Handle ranges like '2-8'
+            const [start, end] = pageSelection.split('-').map(Number);
+            if (start > pages || end > pages || start < 1 || end < 1) {
+                alert(`Số trang nhập không hợp lệ. Vui lòng chọn trong khoảng từ 1 đến ${pages}.`);
+                return false;
+            }
+        } else if (pageSelection.includes(',')) {
+            // Handle comma-separated pages like '1,3,5'
+            const pagesArray = pageSelection.split(',').map(Number);
+            const invalidPages = pagesArray.some((page) => page > pages || page < 1);
+            if (invalidPages) {
+                alert(`Số trang nhập không hợp lệ. Vui lòng chọn trong khoảng từ 1 đến ${pages}.`);
+                return false;
+            }
+        }
+
+        // validate cho số trang mỗi tờ
         if (![1, 2, 4].includes(pagesPerSheet)) {
             alert('Số trang mỗi tờ phải là 1, 2 hoặc 4.');
             return false;
@@ -146,8 +206,8 @@ function Print() {
     const handlePrint = () => {
         if (validateForm()) {
             // Logic để thực hiện in ấn
-            const newPages = parseInt(pages);
-            addHistory(fileName, printer, newPages);
+            const pagesCount = parseInt(pageCount);
+            addHistory(fileName, printer, pagesCount);
             alert('In Thành công!');
         }
     };
