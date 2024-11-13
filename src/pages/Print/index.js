@@ -18,7 +18,7 @@ function Print() {
     const [fileName, setFileName] = useState('Không có tệp nào được chọn');
     const [copies, setCopies] = useState(1);
     const [printer, setPrinter] = useState('');
-    const [pages, setPages] = useState(33);
+    const [pages, setPages] = useState(0);
     const [paperSize, setPaperSize] = useState('A4');
     const [sides, setSides] = useState('1 mặt');
     const [orientation, setOrientation] = useState('Khổ dọc');
