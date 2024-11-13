@@ -82,18 +82,22 @@ function Buy() {
 
     const handlePayment = (e) => {
         e.preventDefault();
-        const currentTime = new Date().toLocaleString();
-        let newEntry;
-        newEntry = {
-            time: currentTime,
-            numberOfPages,
-            totalPrice,
-            status: 'Đang chờ', // Assume payment is successful
-            'status-color': 'status-pending',
-        };
-        alert('Đã thêm đơn mua vào hàng chờ!');
+        if (numberOfPages < 1) {
+            alert('Số trang muốn mua phải lớn hơn 1');
+        } else {
+            const currentTime = new Date().toLocaleString();
+            let newEntry;
+            newEntry = {
+                time: currentTime,
+                numberOfPages,
+                totalPrice,
+                status: 'Đang chờ', // Assume payment is successful
+                'status-color': 'status-pending',
+            };
+            alert('Đã thêm đơn mua vào hàng chờ!');
 
-        setHistoryTable((prevHistory) => [newEntry, ...prevHistory]);
+            setHistoryTable((prevHistory) => [newEntry, ...prevHistory]);
+        }
     };
 
     historyTable.forEach((entry) => {
@@ -187,6 +191,7 @@ function Buy() {
                                         <input
                                             type="number"
                                             className="form-control"
+                                            min={1}
                                             value={numberOfPages}
                                             onChange={(e) => setNumberOfPages(e.target.value)}
                                         />

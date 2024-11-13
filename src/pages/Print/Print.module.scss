@@ -85,6 +85,11 @@
         .option-group:nth-child(2n) {
             width: 18%;
         }
+        .option-group:last-child {
+            input {
+                background-color: var(--white);
+            }
+        }
     }
 }
 

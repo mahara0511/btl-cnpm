@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Print.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,7 +26,7 @@ function Print() {
     const [scaling, setScaling] = useState('100%');
     const [pageSelection, setPageSelection] = useState('2-10');
     const [pagesPerSheet, setPagesPerSheet] = useState(1);
-    const [pageCount, setPageCount] = useState(0); // Trạng thái để lưu số trang
+    const [pageCount, setPageCount] = useState(0); // Trạng thái để lưu số trang dùng để in ra
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -53,6 +53,34 @@ function Print() {
             setPages(count);
         }
     };
+
+    useEffect(() => {
+        let calculatedPages = pages;
+        // Xử lý các điều kiện theo lựa chọn số mặt giấy
+        if (sides === '2 mặt') {
+            calculatedPages = Math.ceil(calculatedPages / 2);
+        }
+
+        if (sides === '4 mặt') {
+            calculatedPages = Math.ceil(calculatedPages / 2);
+        }
+
+        // Tính toán trang dựa vào lựa chọn trang (tất cả, trang lẻ, trang chẵn, tùy chỉnh)
+        if (pageSelection === 'Chỉ in trang lẻ') {
+            calculatedPages = Math.ceil(calculatedPages / 2);
+        } else if (pageSelection === 'Chỉ in trang chẵn') {
+            calculatedPages = Math.floor(calculatedPages / 2);
+        }
+        // Nhân với số bản in
+        calculatedPages = calculatedPages * copies;
+
+        // chia cho số tờ mỗi trang
+        calculatedPages = Math.ceil(calculatedPages / pagesPerSheet);
+
+        console.log(calculatedPages);
+        setPageCount(calculatedPages);
+        // setPages(calculatedPages);
+    }, [fileUrl, copies, pages, sides, pageSelection, pagesPerSheet]);
 
     const countPdfPages = async (file) => {
         const pdf = await getDocument(URL.createObjectURL(file)).promise;
@@ -168,7 +196,7 @@ function Print() {
                     <div className={cx('option-group')}>
                         <label>
                             4. Số trang sử dụng:
-                            <input type="number" value={pages} onChange={(e) => setPages(e.target.value)} min="1" />
+                            <input type="number" value={pageCount} disabled min="1" />
                         </label>
                     </div>
                 </div>
@@ -316,9 +344,6 @@ function Print() {
                                         type="string"
                                         value={pageSelection}
                                         onChange={(e) => setPageSelection(e.target.value)}
-                                        min="10"
-                                        max="200"
-                                        step="10"
                                     />
                                 </div>
                                 {/* Other options */}
