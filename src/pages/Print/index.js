@@ -6,6 +6,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import Button from '~/components/Button';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
+import { getDocument } from 'pdfjs-dist/webpack';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { useProvider } from '~/components/Provider';
@@ -25,7 +26,7 @@ function Print() {
     const [scaling, setScaling] = useState('100%');
     const [pageSelection, setPageSelection] = useState('2-10');
     const [pagesPerSheet, setPagesPerSheet] = useState(1);
-
+    const [pageCount, setPageCount] = useState(0); // Trạng thái để lưu số trang
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -35,8 +36,25 @@ function Print() {
         if (file) {
             const fileUrl = URL.createObjectURL(file);
             setFileUrl(fileUrl);
-            console.log(fileUrl);
+            const count = await countPdfPages(file);
+            setPages(count);
+            console.log(count);
         }
+    };
+
+    const countPdfPages = async (file) => {
+        const pdf = await getDocument(URL.createObjectURL(file)).promise;
+        return pdf.numPages;
+    };
+
+    const countSlides = async (file) => {
+        const zip = await JSZip.loadAsync(file); // Giải nén tệp pptx
+
+        // Tìm kiếm trong tệp pptx, nội dung slide nằm trong thư mục `ppt/slides/`
+        const slideFiles = Object.keys(zip.files).filter((fileName) => fileName.startsWith('ppt/slides/slide'));
+
+        // Đếm số lượng slide
+        return slideFiles.length;
     };
 
     const validateForm = () => {
