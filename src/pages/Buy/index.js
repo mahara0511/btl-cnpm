@@ -118,7 +118,6 @@ function Buy() {
         setHistoryTable((prevHistory) => {
             const newHistory = [...prevHistory];
             if (newHistory[index].status === 'Đang chờ') {
-                // Đảm bảo chỉ cập nhật nếu trạng thái chưa phải là 'Thành công'
                 newHistory[index] = {
                     ...newHistory[index],
                     status: 'Thành công',
