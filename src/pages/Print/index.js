@@ -70,7 +70,6 @@ function Print() {
                 const fileContent = await getFileContent(id);
                 setFileName(fileContent.fileName);
                 const file = await getFile(id);
-                console.log(file.data);
                 if (file) {
                     const fileUrl = window.URL.createObjectURL(new Blob([file.data]));
                     setFileUrl(fileUrl);
@@ -297,25 +296,36 @@ function Print() {
             // const [pageCount, setPageCount] = useState(0); // Trạng thái để lưu số trang dùng để in ra
 
             const formData = new FormData();
-            formData.append('file', file); // Giả sử bạn đã có một input file với tên "file"
-            formData.append('numCopy', copies);
+            formData.append('numCopy', 1);
             formData.append('numPage', pages);
-            formData.append('orientation', orientation);
-            formData.append('scale', scaling);
-            formData.append('paperSize', paperSize);
-            formData.append('numSide', sides);
+            formData.append('orientation', 1);
+            formData.append('scale', 1);
+            formData.append('paperSize', 1);
+            formData.append('numSide', 1);
             formData.append('printerID', printer);
-
-            axios
-                .post('http://localhost:8080/v1/api/order/create', formData)
-                .then((response) => {
-                    console.log('Success:', response.data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-
-            alert('In Thành công!');
+            if (id !== ':id') {
+                formData.append('fileID', id);
+                axios
+                    .post('http://localhost:8080/v1/api/order/create1', formData)
+                    .then((response) => {
+                        console.log('Success:', response.data);
+                        alert('In Thành công!');
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                formData.append('file', file);
+                axios
+                    .post('http://localhost:8080/v1/api/order/create', formData)
+                    .then((response) => {
+                        console.log('Success:', response.data);
+                        alert('In Thành công!');
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
         }
     };
 
