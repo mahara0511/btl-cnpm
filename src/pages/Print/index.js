@@ -309,7 +309,7 @@ function Print() {
                     .post('http://localhost:8080/v1/api/order/create1', formData)
                     .then((response) => {
                         console.log('Success:', response.data);
-                        alert('In Thành công!');
+                        alert('Thêm đơn thành công!');
                     })
                     .catch((error) => {
                         console.error('Error:', error);
@@ -320,7 +320,7 @@ function Print() {
                     .post('http://localhost:8080/v1/api/order/create', formData)
                     .then((response) => {
                         console.log('Success:', response.data);
-                        alert('In Thành công!');
+                        alert('Thêm đơn thành công');
                     })
                     .catch((error) => {
                         console.error('Error:', error);

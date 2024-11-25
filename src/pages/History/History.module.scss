@@ -1,4 +1,15 @@
 .wrapper {
+    .status-pending {
+        color: #007bff !important;
+    }
+
+    .status-success {
+        color: #28a745 !important;
+    }
+
+    .status-cancelled {
+        color: #dc3545 !important;
+    }
     padding: 0 60px 50px;
     h2 {
         color: var(--primary);
@@ -17,12 +28,28 @@
 
         .header-table {
             .header-table-btn {
+                width: 130px;
                 font-size: 14px;
                 margin: 10px 10px 4px;
-                padding: 4px 6px;
+                padding: 4px 12px;
                 font-weight: 600;
                 background-color: #d9d9d9;
                 border-radius: 6px;
+            }
+
+            .filter-button {
+                padding: 4px 22px;
+                color: var(--primary);
+                font-weight: 600;
+                font-size: 14px;
+                min-width: 0;
+                margin-left: 20px;
+                transition: background-color 0.3s;
+            }
+
+            .filter-button:hover {
+                color: var(--white);
+                background-color: #007bff;
             }
         }
         .custom-table {
