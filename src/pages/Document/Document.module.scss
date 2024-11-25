@@ -77,14 +77,25 @@
                             font-size: 16px;
                             margin-right: 16px;
                         }
-
+                        .print-btn,
                         .delete-btn {
                             padding: 0;
                             margin: 0;
                             font-size: 12px;
-                            width: 4px;
+                            min-width: 45px;
+                        }
+
+                        .delete-btn {
                             color: red;
                             .delete-icon {
+                                font-size: 12px;
+                                margin-right: 3px;
+                            }
+                        }
+
+                        .print-btn {
+                            color: var(--primary);
+                            .print-icon {
                                 font-size: 12px;
                                 margin-right: 3px;
                             }

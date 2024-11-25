@@ -17,16 +17,14 @@ import {
 
 // import { faFile } from '@fortawesome/free-regular-svg-icons';
 import { Link, useLocation } from 'react-router-dom';
-import Tippy from '@tippyjs/react';
+import { match } from 'path-to-regexp';
 import 'tippy.js/dist/tippy.css';
 import config from '~/config';
 import Button from '~/components/Button';
 import styles from './Header.module.scss';
 import Menu from '~/components/Popper/Menu';
-import { InboxIcon, MessageIcon, UploadIcon } from '~/components/Icons';
 import images from '~/assets/images';
 import Image from '~/components/Image';
-import Search from '../Search';
 import { useProvider } from '~/components/Provider';
 
 const cx = classNames.bind(styles);
@@ -75,7 +73,10 @@ function Header() {
 
     const location = useLocation();
     const currentUser = true;
-    const isActive = (path) => location.pathname === path;
+    const isActive = (path) => {
+        const matcher = match(path, { decode: decodeURIComponent });
+        return matcher(location.pathname) !== false;
+    };
     // Handle logic
     const handleMenuChange = (menuItem) => {
         switch (menuItem.type) {
@@ -114,53 +115,6 @@ function Header() {
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
-                {/* <Link to={config.routes.home} className={cx('logo-link')}>
-                    <img src={images.logo} alt="Tiktok" />
-                </Link>
-
-                <Search />
-
-                <div className={cx('actions')}>
-                    {currentUser ? (
-                        <>
-                            <Tippy delay={[0, 50]} content="Upload video" placement="bottom">
-                                <button className={cx('action-btn')}>
-                                    <UploadIcon />
-                                </button>
-                            </Tippy>
-                            <Tippy delay={[0, 50]} content="Message" placement="bottom">
-                                <button className={cx('action-btn')}>
-                                    <MessageIcon />
-                                </button>
-                            </Tippy>
-                            <Tippy delay={[0, 50]} content="Inbox" placement="bottom">
-                                <button className={cx('action-btn')}>
-                                    <InboxIcon />
-                                    <span className={cx('badge')}>12</span>
-                                </button>
-                            </Tippy>
-                        </>
-                    ) : (
-                        <>
-                            <Button text>Upload</Button>
-                            <Button primary>Log in</Button>
-                        </>
-                    )}
-
-                    <Menu items={currentUser ? userMenu : MENU_ITEMS} onChange={handleMenuChange}>
-                        {currentUser ? (
-                            <Image
-                                className={cx('user-avatar')}
-                                src="https://files.fullstack.edu.vn/f8-prod/user_avatars/1/623d4b2d95cec.png"
-                                alt="Nguyen Van A"
-                            />
-                        ) : (
-                            <button className={cx('more-btn')}>
-                                <FontAwesomeIcon icon={faEllipsisVertical} />
-                            </button>
-                        )}
-                    </Menu>
-                </div> */}
                 <div className={cx('navbar')}>
                     <Link to={config.routes.login} className={cx('logo-link')}>
                         <img src={images.logo} alt="" className={cx('logo-img')} />

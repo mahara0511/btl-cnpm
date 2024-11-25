@@ -8,28 +8,31 @@ const cx = classNames.bind(styles);
 
 function History() {
     // Dữ liệu giả lập cho các hàng trong bảng
-    const { history, clearHistory } = useProvider();
+    const { history, clearHistory } = useProvider([]);
     const [filteredHistory, setFilteredHistory] = useState([]);
     // Tính tổng số trang đã in
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
+    // useEffect(() => {
+    //     // Lấy thời gian hiện tại
+    //     const currentDate = new Date();
+    //     const currentTime = new Date();
+    //     // Lấy mốc thời gian của một tháng trước
+    //     const startOfLastMonth = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+
+    //     // Cập nhật state với thời gian
+    //     setStartDate(startOfLastMonth.toLocaleString());
+    //     setEndDate(currentTime.toLocaleString());
+    //     const filtered = history.filter((row) => {
+    //         const rowStartDate = new Date(row.startTime); // Giả sử startTime là chuỗi ngày tháng
+
+    //         return rowStartDate >= startOfLastMonth && rowStartDate <= currentTime;
+    //     });
+    //     setFilteredHistory(filtered);
+    // }, []);
     useEffect(() => {
-        // Lấy thời gian hiện tại
-        const currentDate = new Date();
-        const currentTime = new Date();
-        // Lấy mốc thời gian của một tháng trước
-        const startOfLastMonth = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
-
-        // Cập nhật state với thời gian
-        setStartDate(startOfLastMonth.toLocaleString());
-        setEndDate(currentTime.toLocaleString());
-        const filtered = history.filter((row) => {
-            const rowStartDate = new Date(row.startTime); // Giả sử startTime là chuỗi ngày tháng
-
-            return rowStartDate >= startOfLastMonth && rowStartDate <= currentTime;
-        });
-        setFilteredHistory(filtered);
+        console.log('1');
     }, []);
     const totalPrintedPages = history.reduce((acc, row) => acc + parseInt(row.totalPages), 0);
 

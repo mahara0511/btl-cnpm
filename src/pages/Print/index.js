@@ -12,6 +12,8 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { useProvider } from '~/components/Provider';
 import JSZip from 'jszip';
 import mammoth from 'mammoth';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 const cx = classNames.bind(styles);
 function Print() {
     const { addHistory } = useProvider();
@@ -29,6 +31,21 @@ function Print() {
     const [pagesPerSheet, setPagesPerSheet] = useState(1);
     const [pageCount, setPageCount] = useState(0); // Trạng thái để lưu số trang dùng để in ra
 
+    const { id } = useParams(); // Nếu URL có tham số động như '/print/:id'
+
+    useEffect(() => {
+        if (id) {
+            axios
+                .get(`http://localhost:8080/v1/api/file/${id}`) // Giả sử API của bạn có dạng như vậy
+                .then((response) => {
+                    console.log(response.data); // Lưu dữ liệu file vào state
+                })
+                .catch((error) => {
+                    console.error('Có lỗi xảy ra khi gọi API:', error);
+                });
+        }
+    }, []);
+
     // Xử lí khi file change
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
@@ -40,7 +57,6 @@ function Print() {
             const fileUrl = URL.createObjectURL(file);
             setFileUrl(fileUrl);
             const fileType = file.type;
-            console.log(file);
             let count = 3;
 
             if (fileType === 'application/pdf') {
@@ -104,7 +120,6 @@ function Print() {
         // chia cho số tờ mỗi trang
         calculatedPages = Math.ceil(calculatedPages / pagesPerSheet);
 
-        console.log(calculatedPages);
         setPageCount(calculatedPages);
         // setPages(calculatedPages);
     }, [fileUrl, copies, pages, sides, pageSelection, pagesPerSheet]);

@@ -23,6 +23,7 @@
         "mammoth": "^1.8.0",
         "normalize.css": "^8.0.1",
         "page-count": "^0.0.4",
+        "path-to-regexp": "^8.2.0",
         "pdfjs-dist": "^3.11.174",
         "postcss": "^7.0.39",
         "postcss-flexbugs-fixes": "^4.2.1",

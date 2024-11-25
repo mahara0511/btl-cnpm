@@ -1,45 +1,44 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 
-// Tạo PaperCountContext
+// Create PaperCountContext
 const Context = createContext();
 
-// PaperCountProvider để cung cấp giá trị paperCount
+// PaperCountProvider to provide the paperCount value
 export const Provider = ({ children }) => {
-    const [paperCount, setPaperCount] = useState(localStorage.getItem('paperCount') || 500);
-    const [history, setHistory] = useState(JSON.parse(localStorage.getItem('history')) || []);
-    // Hàm để cập nhật paperCount
-    const updatePaperCount = (count) => {
-        setPaperCount(count);
-        localStorage.setItem('paperCount', count); // Lưu vào localStorage
-    };
+    const [paperCount, setPaperCount] = useState(500); // Default value
 
-    const addHistory = (fileName, printer, totalPages) => {
-        const startTime = new Date();
-        const endTime = new Date(startTime);
-        endTime.setSeconds(startTime.getSeconds() + 5); // Cộng thêm 5 giây vào endTime
-        const newEntry = {
-            startTime: startTime.toLocaleString(),
-            endTime: endTime.toLocaleString(), // Có thể thay thế bằng thời gian thực tế
-            fileName,
-            printer,
-            totalPages,
+    // Fetch the paper count from the server
+    useEffect(() => {
+        const fetchPaperCount = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/v1/api/user/1');
+                if (response.status === 200) {
+                    setPaperCount(response.data.data.pages); // Set paper count from response
+                } else {
+                    console.log('Data not found', response.data.message);
+                }
+            } catch (e) {
+                if (e.response) {
+                    console.log(`Error from server: ${e.response.data.message || 'unknown error'}`);
+                } else if (e.request) {
+                    console.log('Cannot connect to the server');
+                } else {
+                    console.log('Error:', e.message);
+                }
+            }
         };
 
-        const newHistory = [...history, newEntry];
-        setHistory(newHistory);
-        localStorage.setItem('history', JSON.stringify(newHistory));
+        fetchPaperCount(); // Call the async function
+    }, []); // This will run only once after the initial render
+
+    // Function to update paperCount
+    const updatePaperCount = (count) => {
+        setPaperCount(count); // Update state
     };
 
-    const clearHistory = () => {
-        setHistory([]);
-        localStorage.removeItem('history');
-    };
-    return (
-        <Context.Provider value={{ paperCount, updatePaperCount, history, addHistory, clearHistory }}>
-            {children}
-        </Context.Provider>
-    );
+    return <Context.Provider value={{ paperCount, updatePaperCount }}>{children}</Context.Provider>;
 };
 
-// Hook để sử dụng PaperCountContext trong các component
+// Hook to use the PaperCountContext in components
 export const useProvider = () => useContext(Context);

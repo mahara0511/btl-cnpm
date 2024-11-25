@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import styles from './Buy.module.scss';
+import axios from 'axios';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -8,7 +9,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useDropzone } from 'react-dropzone';
 import Button from '~/components/Button';
 import { useProvider } from '~/components/Provider';
-
+const qs = require('qs');
 const cx = classNames.bind(styles);
 
 function Buy() {
@@ -42,6 +43,7 @@ function Buy() {
     const [numberOfPages, setNumberOfPages] = useState(1);
     const [totalPrice, setTotalPrice] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('BK Pay');
+
     const [historyTable, setHistoryTable] = useState([
         // {
         //     time: '11:30 10/10/2024',
@@ -66,37 +68,94 @@ function Buy() {
         // },
     ]);
 
-    useEffect(() => {
-        const storedHistory = localStorage.getItem('historyTable');
-        if (storedHistory) {
-            setHistoryTable(JSON.parse(storedHistory));
+    const fetchHistoryTable = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/v1/api/buyPages/records');
+            if (response.status === 200) {
+                const data = response.data.data;
+
+                // Sort data by time in descending order
+                const sortedData = data.sort((a, b) => new Date(b.time) - new Date(a.time));
+                setHistoryTable(sortedData);
+            }
+        } catch (e) {
+            if (e.response) {
+                console.log(`Error from server: ${e.response.data.message || 'unknown error'}`);
+            } else if (e.request) {
+                console.log('Cannot connect to the server');
+            } else {
+                console.log('Error:', e.message);
+            }
         }
+    };
+
+    useEffect(() => {
+        fetchHistoryTable();
     }, []);
 
-    // Save history to localStorage whenever it changes
-    useEffect(() => {
-        if (historyTable.length > 0) {
-            localStorage.setItem('historyTable', JSON.stringify(historyTable));
-        }
-    }, [historyTable]);
-
-    const handlePayment = (e) => {
+    const handlePayment = async (e) => {
         e.preventDefault();
         if (numberOfPages < 1) {
             alert('Số trang muốn mua phải lớn hơn 1');
         } else {
-            const currentTime = new Date().toLocaleString();
-            let newEntry;
-            newEntry = {
-                time: currentTime,
-                numberOfPages,
-                totalPrice,
-                status: 'Đang chờ', // Assume payment is successful
-                'status-color': 'status-pending',
-            };
-            alert('Đã thêm đơn mua vào hàng chờ!');
+            try {
+                const data = qs.stringify({
+                    numPage: numberOfPages,
+                    cost: parseInt(totalPrice.replace(/,/g, ''), 10),
+                    method: paymentMethod,
+                });
+                const response = await axios.post('http://localhost:8080/v1/api/buyPages', data, {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                });
+                if (response.status === 200) {
+                    alert(response.message || 'Giao dịch thành công');
+                    try {
+                        const response = await axios.get('http://localhost:8080/v1/api/user/1');
+                        if (response.status === 200) {
+                            updatePaperCount(response.data.data.pages); // Set paper count from response
+                            fetchHistoryTable();
+                        } else {
+                            console.log('Data not found', response.data.message);
+                        }
+                    } catch (e) {
+                        if (e.response) {
+                            console.log(`Error from server: ${e.response.data.message || 'unknown error'}`);
+                        } else if (e.request) {
+                            console.log('Cannot connect to the server');
+                        } else {
+                            console.log('Error:', e.message);
+                        }
+                    }
+                } else if (response.status === 404) {
+                    alert(response.message || 'Không tìm thấy tài nguyên');
+                } else if (response.status === 400) {
+                    console.log(response.message);
+                }
+            } catch (e) {
+                if (e.response) {
+                    console.log(`Lỗi từ server: ${e.response.message || 'không xác định'} `);
+                    // alert('Hệ thống hiện đang lỗi, vui lòng thử lại sau');
+                } else if (e.request) {
+                    console.log('Không thể kết nối đến server');
+                }
+            }
 
-            setHistoryTable((prevHistory) => [newEntry, ...prevHistory]);
+            // setHistoryTable((prevHistory) => [newEntry, ...prevHistory]);
+        }
+    };
+
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'Successful':
+                return 'status-success'; // Replace with your desired class name
+            case 'Failed':
+                return 'status-cancelled'; // Replace with your desired class name
+            case 'Pending':
+                return 'status-pending'; // Replace with your desired class name
+            default:
+                return 'default-color'; // Replace with a fallback class name
         }
     };
 
@@ -114,38 +173,6 @@ function Buy() {
         setTotalPrice(`${calculatedPrice.toLocaleString('en-US')}`);
     }, [numberOfPages]);
 
-    const handleStatusClick = (index, numberOfPages) => {
-        setHistoryTable((prevHistory) => {
-            const newHistory = [...prevHistory];
-            if (newHistory[index].status === 'Đang chờ') {
-                newHistory[index] = {
-                    ...newHistory[index],
-                    status: 'Thành công',
-                    'status-color': 'status-success',
-                };
-
-                updatePaperCount(paperCount + parseInt(numberOfPages));
-            }
-
-            return newHistory;
-        });
-    };
-
-    const handleStatusDoubleClick = (index, numberOfPages) => {
-        setHistoryTable((prevHistory) => {
-            const newHistory = [...prevHistory];
-
-            if (newHistory[index].status !== 'Thành công') {
-                // Chưa thành công thì mới hủy được
-                newHistory[index] = {
-                    ...newHistory[index],
-                    status: 'Đã hủy',
-                    'status-color': 'status-cancelled',
-                };
-            }
-            return newHistory;
-        });
-    };
     return (
         <div className={`${cx('print-wrapper')} container`}>
             <h1 className={`${cx('purchase-header')} `}>MUA GIẤY</h1>
@@ -243,24 +270,11 @@ function Buy() {
                                     <tbody>
                                         {historyTable.map((row, index) => (
                                             <tr key={index}>
-                                                <td
-                                                    onDoubleClick={() =>
-                                                        handleStatusDoubleClick(index, row.numberOfPages)
-                                                    }
-                                                    style={{ cursor: 'pointer' }}
-                                                >
-                                                    {index + 1}
-                                                </td>
+                                                <td>{index + 1}</td>
                                                 <td>{row.time}</td>
-                                                <td>{row.numberOfPages}</td>
+                                                <td>{row.amount}</td>
                                                 <td>{`${row.totalPrice} VNĐ`}</td>
-                                                <td
-                                                    onClick={() => handleStatusClick(index, row.numberOfPages)}
-                                                    className={cx(row['status-color'])}
-                                                    style={{ cursor: 'pointer' }}
-                                                >
-                                                    {row.status}
-                                                </td>
+                                                <td className={cx(getStatusColor(row.status))}>{row.status}</td>
                                             </tr>
                                         ))}
                                     </tbody>
