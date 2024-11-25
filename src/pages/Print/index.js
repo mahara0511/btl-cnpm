@@ -16,8 +16,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 const cx = classNames.bind(styles);
 function Print() {
-    const { addHistory } = useProvider();
-
+    const [file, setFile] = useState();
     const [fileUrl, setFileUrl] = useState(null);
     const [fileName, setFileName] = useState('Mời bạn chọn một tệp để in');
     const [copies, setCopies] = useState(1);
@@ -109,7 +108,7 @@ function Print() {
 
     // Xử lí khi file change
     const handleFileChange = async (event) => {
-        const file = event.target.files[0];
+        setFile(event.target.files[0]);
         if (!file) return;
 
         setFileName(file.name);
@@ -283,7 +282,39 @@ function Print() {
         if (validateForm()) {
             // Logic để thực hiện in ấn
             const pagesCount = parseInt(pageCount);
-            addHistory(fileName, printer, pagesCount);
+
+            // const [fileUrl, setFileUrl] = useState(null);
+            // const [fileName, setFileName] = useState('Mời bạn chọn một tệp để in');
+            // const [copies, setCopies] = useState(1);
+            // const [printer, setPrinter] = useState('');
+            // const [pages, setPages] = useState(0);
+            // const [paperSize, setPaperSize] = useState('A4');
+            // const [sides, setSides] = useState('1 mặt');
+            // const [orientation, setOrientation] = useState('Khổ dọc');
+            // const [scaling, setScaling] = useState('100%');
+            // const [pageSelection, setPageSelection] = useState('2-3');
+            // const [pagesPerSheet, setPagesPerSheet] = useState(1);
+            // const [pageCount, setPageCount] = useState(0); // Trạng thái để lưu số trang dùng để in ra
+
+            const formData = new FormData();
+            formData.append('file', file); // Giả sử bạn đã có một input file với tên "file"
+            formData.append('numCopy', copies);
+            formData.append('numPage', pages);
+            formData.append('orientation', orientation);
+            formData.append('scale', scaling);
+            formData.append('paperSize', paperSize);
+            formData.append('numSide', sides);
+            formData.append('printerID', printer);
+
+            axios
+                .post('http://localhost:8080/v1/api/order/create', formData)
+                .then((response) => {
+                    console.log('Success:', response.data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+
             alert('In Thành công!');
         }
     };
