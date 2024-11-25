@@ -3,37 +3,31 @@ import styles from './History.module.scss';
 import classNames from 'classnames/bind';
 import Button from '~/components/Button';
 
-import { useProvider } from '~/components/Provider';
 const cx = classNames.bind(styles);
 
 function History() {
     // Dữ liệu giả lập cho các hàng trong bảng
-    const { history, clearHistory } = useProvider([]);
-    const [filteredHistory, setFilteredHistory] = useState([]);
-    // Tính tổng số trang đã in
+    const [history, setHistory] = useState([
+        // sử dụng useState đúng cách
+        {
+            startTime: 1,
+            endTime: 2,
+            fileName: 'File 1',
+            printer: 'Printer 1',
+            totalPages: 5,
+        },
+        {
+            startTime: 3,
+            endTime: 4,
+            fileName: 'File 2',
+            printer: 'Printer 2',
+            totalPages: 10,
+        },
+    ]);
+
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
-    // useEffect(() => {
-    //     // Lấy thời gian hiện tại
-    //     const currentDate = new Date();
-    //     const currentTime = new Date();
-    //     // Lấy mốc thời gian của một tháng trước
-    //     const startOfLastMonth = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
-
-    //     // Cập nhật state với thời gian
-    //     setStartDate(startOfLastMonth.toLocaleString());
-    //     setEndDate(currentTime.toLocaleString());
-    //     const filtered = history.filter((row) => {
-    //         const rowStartDate = new Date(row.startTime); // Giả sử startTime là chuỗi ngày tháng
-
-    //         return rowStartDate >= startOfLastMonth && rowStartDate <= currentTime;
-    //     });
-    //     setFilteredHistory(filtered);
-    // }, []);
-    useEffect(() => {
-        console.log('1');
-    }, []);
     const totalPrintedPages = history.reduce((acc, row) => acc + parseInt(row.totalPages), 0);
 
     return (

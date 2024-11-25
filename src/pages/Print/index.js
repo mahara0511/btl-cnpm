@@ -19,7 +19,7 @@ function Print() {
     const { addHistory } = useProvider();
 
     const [fileUrl, setFileUrl] = useState(null);
-    const [fileName, setFileName] = useState('Không có tệp nào được chọn');
+    const [fileName, setFileName] = useState('Mời bạn chọn một tệp để in');
     const [copies, setCopies] = useState(1);
     const [printer, setPrinter] = useState('');
     const [pages, setPages] = useState(0);
@@ -34,16 +34,77 @@ function Print() {
     const { id } = useParams(); // Nếu URL có tham số động như '/print/:id'
 
     useEffect(() => {
-        if (id) {
-            axios
-                .get(`http://localhost:8080/v1/api/file/${id}`) // Giả sử API của bạn có dạng như vậy
-                .then((response) => {
-                    console.log(response.data); // Lưu dữ liệu file vào state
-                })
-                .catch((error) => {
-                    console.error('Có lỗi xảy ra khi gọi API:', error);
+        const getFileContent = async (id) => {
+            try {
+                const response = await axios.get(`http://localhost:8080/v1/api/file/${id}`);
+                return response.data.data[0];
+            } catch (e) {
+                if (e.response) {
+                    console.log(`Error from server: ${e}`);
+                } else if (e.request) {
+                    console.log('Cannot connect to the server');
+                } else {
+                    console.log('Error:', e.message);
+                }
+            }
+        };
+
+        const getFile = async (id) => {
+            try {
+                const response = await axios.get(`http://localhost:8080/download/${id}`, {
+                    responseType: 'blob', // Thiết lập responseType là 'blob' để nhận dữ liệu nhị phân (file)
                 });
-        }
+                return response;
+            } catch (e) {
+                if (e.response) {
+                    console.log(`Error from server: ${e}`);
+                } else if (e.request) {
+                    console.log('Cannot connect to the server');
+                } else {
+                    console.log('Error:', e.message);
+                }
+            }
+        };
+
+        const handleMyFile = async () => {
+            if (id !== ':id') {
+                const fileContent = await getFileContent(id);
+                setFileName(fileContent.fileName);
+                const file = await getFile(id);
+                console.log(file.data);
+                if (file) {
+                    const fileUrl = window.URL.createObjectURL(new Blob([file.data]));
+                    setFileUrl(fileUrl);
+                    const fileType = fileContent.type;
+                    let count = 3;
+
+                    if (fileType === 'application/pdf') {
+                        // Đếm số trang PDF
+                        count = await countPdfPages(file.data);
+                    } else if (
+                        fileType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+                    ) {
+                        // Đếm số slide PPTX
+                        count = await countSlides(file);
+                    } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                        mammoth
+                            .extractRawText({ arrayBuffer: file })
+                            .then((result) => {
+                                const text = result.value; // Extracted text from the .docx file
+                                const wordsPerPage = 300; // Average words per page, adjustable
+                                const wordCount = text.split(/\s+/).length;
+                                count = Math.ceil(wordCount / wordsPerPage);
+                            })
+                            .catch((error) => {
+                                console.error('Error reading Word file:', error);
+                            });
+                    }
+                    setPages(count);
+                }
+            }
+        };
+
+        handleMyFile();
     }, []);
 
     // Xử lí khi file change
