@@ -24,6 +24,20 @@ function History() {
                 return 'default-color'; // Replace with a fallback class name
         }
     };
+
+    const getStatus = (status) => {
+        switch (status) {
+            case 'Successful':
+                return 'Thành công'; // Replace with your desired class name
+            case 'Failed':
+                return 'Thất bại'; // Replace with your desired class name
+            case 'Progressing':
+                return 'Đang xử lí'; // Replace with your desired class name
+            default:
+                return 'default'; // Replace with a fallback class name
+        }
+    };
+
     useEffect(() => {
         axios
             .get('http://localhost:8080/v1/api/getHistory/1')
@@ -98,7 +112,7 @@ function History() {
                                 <tr key={index}>
                                     <td>{row.time}</td>
                                     <td>{row.fileName}</td>
-                                    <td className={cx(getStatusColor(row.status))}>{row.status}</td>
+                                    <td className={cx(getStatusColor(row.status))}>{getStatus(row.status)}</td>
                                     <td>{row.printerID}</td>
                                     <td>{row.numPage}</td>
                                 </tr>

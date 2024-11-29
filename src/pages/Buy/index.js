@@ -159,6 +159,19 @@ function Buy() {
         }
     };
 
+    const getStatus = (status) => {
+        switch (status) {
+            case 'Successful':
+                return 'Thành công'; // Replace with your desired class name
+            case 'Failed':
+                return 'Thất bại'; // Replace with your desired class name
+            case 'Pending':
+                return 'Đang chờ'; // Replace with your desired class name
+            default:
+                return 'default'; // Replace with a fallback class name
+        }
+    };
+
     historyTable.forEach((entry) => {
         entry.totalPrice = entry.totalPrice.toLocaleString('en-US'); // Formats with commas
     });
@@ -234,8 +247,6 @@ function Buy() {
                                             onChange={(e) => setPaymentMethod(e.target.value)}
                                         >
                                             <option>BK Pay</option>
-                                            <option>VN Pay</option>
-                                            <option>Zalo Pay</option>
                                         </select>
                                         <FontAwesomeIcon icon={faChevronDown} className={cx('chevron-icon')} />
                                     </div>
@@ -274,7 +285,9 @@ function Buy() {
                                                 <td>{row.time}</td>
                                                 <td>{row.amount}</td>
                                                 <td>{`${row.totalPrice} VNĐ`}</td>
-                                                <td className={cx(getStatusColor(row.status))}>{row.status}</td>
+                                                <td className={cx(getStatusColor(row.status))}>
+                                                    {getStatus(row.status)}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>

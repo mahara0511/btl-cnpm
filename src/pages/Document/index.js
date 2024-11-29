@@ -218,7 +218,6 @@ function Document() {
                                         <Button
                                             leftIcon={<FontAwesomeIcon icon={faTrash} className={cx('print-icon')} />}
                                             className={cx('print-btn')}
-                                            // onClick={() => handlePrintFile(row.id)}
                                             to={`/print/${row.id}`}
                                         >
                                             <span> In</span>
