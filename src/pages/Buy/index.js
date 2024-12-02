@@ -95,8 +95,8 @@ function Buy() {
 
     const handlePayment = async (e) => {
         e.preventDefault();
-        if (numberOfPages < 1) {
-            alert('Số trang muốn mua phải lớn hơn 1');
+        if (numberOfPages < 1 || numberOfPages > 4999) {
+            alert('Số trang muốn mua phải lớn hơn 0 và nhỏ hơn 5000 ');
         } else {
             try {
                 const data = qs.stringify({

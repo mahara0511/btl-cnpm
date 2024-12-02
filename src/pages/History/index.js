@@ -108,7 +108,7 @@ function History() {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredHistory.map((row, index) => (
+                            {filteredHistory.reverse().map((row, index) => (
                                 <tr key={index}>
                                     <td>{row.time}</td>
                                     <td>{row.fileName}</td>
