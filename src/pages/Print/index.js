@@ -107,7 +107,7 @@ function Print() {
 
     // Xử lí khi file change
     const handleFileChange = async (event) => {
-        setFile(event.target.files[0]);
+        await setFile(event.target.files[0]);
         if (!file) return;
 
         setFileName(file.name);
