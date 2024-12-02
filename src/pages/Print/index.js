@@ -144,14 +144,6 @@ function Print() {
     // Tính toán số trang cần dùng để in ra
     useEffect(() => {
         let calculatedPages = pages;
-        // Xử lý các điều kiện theo lựa chọn số mặt giấy
-        if (sides === '2 mặt') {
-            calculatedPages = Math.ceil(calculatedPages / 2);
-        }
-
-        if (sides === '4 mặt') {
-            calculatedPages = Math.ceil(calculatedPages / 2);
-        }
 
         // Tính toán trang dựa vào lựa chọn trang (tất cả, trang lẻ, trang chẵn, tùy chỉnh)
         if (pageSelection === 'Chỉ in trang lẻ') {
@@ -173,6 +165,14 @@ function Print() {
             const pagesArray = pageSelection.split(',').map(Number);
             calculatedPages = pagesArray.length;
         }
+
+        // Xử lý các điều kiện theo lựa chọn số mặt giấy
+        if (sides === '2 mặt') {
+            calculatedPages = Math.ceil(calculatedPages / 2);
+        }
+
+        console.log(pages, calculatedPages);
+
         // Nhân với số bản in
         calculatedPages = calculatedPages * copies;
 
